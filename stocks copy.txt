@@ -1,0 +1,4 @@
+SPY 2
+BOB 2
+DIS 2
+NTDOY 3
