@@ -2,7 +2,7 @@
 # import xlsxwriter
 from datetime import date
 from python_stage5 import Person, Stocks, Group
-import pandas as pdb
+# import pandas as pdb
 import os
 
 
@@ -30,28 +30,28 @@ for x in f2:
     print(y2[0])
     if y2[0] == "Person:":
         run_length+=1
-        Groupx.create_person(y2[1])
+        Groupx.Group_create_person(y2[1])
         print("Super")
     else:
         if y2[0] == "Acronym:":
-            Groupx.add_person_acronym(y2[1], run_length-1)
+            Groupx.Group_add_person_acronym(y2[1], run_length-1)
             print("Super Acronym")
             
         elif y2[0] == "!ST:":
             print("HISTORYXX")
-            Groupx.add_history_person( y2[1], y2[2], y2[3], run_length-1)
+            Groupx.Group_add_history_person( y2[1], y2[2], y2[3], run_length-1)
             # print(y2)
         else:
             print(y2[0])
             tt = y2[0]
-            gg = yf.Ticker(tt)
+            # gg = yf.Ticker(tt)
             print(tt)
             
             gg_info = 100
             # gg.info["regularMarketPrice"]
             print(y2[0], ": $", gg_info)
             
-            Groupx.add_stock_person(y2[0], gg_info, 1, str(time_date), run_length-1)
+            Groupx.Group_add_stock_person(y2[0], gg_info, 1, str(time_date), run_length-1)
             y3.append(y2)
             print("STOCK")
 
@@ -62,7 +62,7 @@ for x in f2:
 f.close()
 
 print(y3)
-Groupx.print_group()
+Groupx.Group_print_group()
 
 # for x in y3:
     # print(x[0])
@@ -84,11 +84,11 @@ workbook = xlsxwriter.Workbook('hello.xlsx')
 content = [1,2,3,4,5]
 person =0
 row=1
-while person < Groupx.get_num_persons():
+while person < Groupx.Group_get_num_persons():
     worksheet = workbook.add_worksheet(Groupx.get_persons_acronym(person))
     stockX =0
     row =1
-    while stockX < Groupx.get_num_persons_stocks(person):
+    while stockX < Groupx.Group_get_num_persons_stocks(person):
         column =0
         worksheet.write(row,column, Groupx.get_persons_stock_date(person, stockX) )
                 
