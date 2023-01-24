@@ -2,7 +2,7 @@ import yfinance as yf
 
 print("Hello")
 
-gg = yf.Ticker("SPY")
+gg = yf.Ticker("DIS")
 
 gg_info = gg.info["regularMarketPrice"]
 

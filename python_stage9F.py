@@ -8,7 +8,7 @@ from python_stage5 import Group
 root = Tk()
 root.title('YAHOO FINANCE CONTROLLER')
 root.iconbitmap('c:/gui/codemy.ico')
-root.geometry("800x400")
+root.geometry("800x600")
 
 my_menu = Menu(root)
 root.config(menu = my_menu)
@@ -33,11 +33,14 @@ def print_value(Group_var):
     ent5 = b1_entry5.get() #date variable
     print(ent5)
     b1_entry5.delete(0,END)
-    result1 = Group_var.Group_insert_Stock(ent1, ent2, ent3, ent4, ent5)
-    if result1:
-        messagebox.showinfo("SUCCEED", "Succeed")
+    if Group_var.Group_stock_verification(ent2):
+        result1 = Group_var.Group_insert_Stock(ent1, ent2, ent3, ent4, ent5)
+        if result1:
+            messagebox.showinfo("SUCCEED", "Succeed")
+        else:
+            messagebox.showerror("error", "Wrong Input")
     else:
-        messagebox.showerror("error", "Wrong Input")
+        messagebox.showerror("error", "STOCK MAY NOT EXIST")
         
 def Add_person(Group_var, List):
     ent1 =  b2_entry.get() #name variable
@@ -98,26 +101,49 @@ def input_control():
 
 def button1_control(Group_var):
     hide_all_frames()
-    button1_frame.pack()
+    button1_frame.pack(padx=20, pady = 20)
     
     # pp_l = Group_var.Group_ret_list_persons()
     # b1_p_list.configure( *pp_l )
+    
+    b1_f1.pack( expand=True)
     b1_p_list['menu'].delete(0, 'end')
     pp_l = Group_var.Group_ret_list_persons()
     # var = StringVar()
     for x0 in pp_l:
         b1_p_list['menu'].add_command(label=x0, command= lambda x= x0: b1_variable0.set(x))
-    b1_label.pack()
-    b1_p_list.pack()
-    b1_label2.pack()
-    b1_entry2.pack()
-    b1_label3.pack()
-    b1_entry3.pack()
-    b1_label4.pack()
-    b1_entry4.pack()
-    b1_label5.pack()
-    b1_entry5.pack()
+    b1_label.pack(side=LEFT)
+    b1_p_list.pack(side=RIGHT)
+    
+    # b1_space.pack()
+    b1_f2.pack( expand=True)
+    b1_label2.pack(side=LEFT)
+    b1_entry2.pack(side=RIGHT)
+    
+    b1_f3.pack( expand=True)
+    b1_label3.pack(side=LEFT)
+    b1_entry3.pack(side=RIGHT)
+    
+    b1_f4.pack( expand=True)
+    b1_label4.pack(side=LEFT)
+    b1_entry4.pack(side=RIGHT)
+    
+    b1_f5.pack( expand=True)
+    b1_label5.pack(side=LEFT)
+    b1_entry5.pack(side=RIGHT)
     b1_button.pack()
+    
+    
+    
+    # b1_f2.pack( expand=True)
+    # b1_label2R.pack(side=LEFT)
+    # b1_p_listR.pack(side=RIGHT)
+    # b1_f2.pack( expand=True)
+    # # b1_f2.pack( expand=True)
+    # b1_label2RR.pack(side=LEFT)
+    # b1_entry2R.pack(side=RIGHT)
+
+    
     
 def button2_control(Group_var):
     hide_all_frames()
@@ -178,7 +204,13 @@ input_frame = Frame(root, width=600, height=500, bg="green")
 
 button_frame = Frame(root, width=600, height=500, bg="green")
 button1_frame = Frame(root, width=600, height=500, bg="green")
-# b1_f1 = Frame(button1_frame, width=400, height=400, bg="green").pack(pady=20,padx=20)
+
+b1_f1 = Frame(button1_frame, width=100, height=100, bg="red")
+b1_f2 = Frame(button1_frame, width=100, height=100, bg="red")
+b1_f3 = Frame(button1_frame, width=100, height=100, bg="red")
+b1_f4 = Frame(button1_frame, width=100, height=100, bg="red")
+b1_f5 = Frame(button1_frame, width=100, height=100, bg="red")
+
 button2_frame = Frame(root, width=600, height=500, bg="green")
 
 
@@ -195,19 +227,35 @@ button_frame.pack()
 
 
 #button 1 labels and variables to use
-b1_label = Label(button1_frame, text="PERSON")
+b1_label = Label(b1_f1, text="PERSON")
 b1_variable0 = StringVar(root)
 b1_variable0.set("") # default value
-pp_l = GroupX.Group_ret_list_persons()
-b1_p_list = OptionMenu(button1_frame, b1_variable0, *pp_l)
-b1_label2 = Label(button1_frame, text="STOCK")
-b1_entry2 = Entry(button1_frame, bd =5, width=100)
-b1_label3 = Label(button1_frame, text="PRICE")
-b1_entry3 = Entry(button1_frame, bd =5, width=100)
-b1_label4 = Label(button1_frame, text="QUANTITY")
-b1_entry4 = Entry(button1_frame, bd =5, width=100)
-b1_label5 = Label(button1_frame, text="DATE")
-b1_entry5 = DateEntry(button1_frame, selectmode="day", bd =5, width=100)
+pp_l = [0]
+b1_p_list = OptionMenu(b1_f1, b1_variable0, *pp_l)
+
+# pp_l = GroupX.Group_ret_list_persons()
+# print("SSS: ", pp_l)
+
+# b1_label2R = Label(b1_f1, text="STOCK")
+# b1_p_listR = OptionMenu(b1_f1, b1_variable0, 0,1,2,3)
+
+# b1_label2RR = Label(b1_f2, text="STOCK")
+# b1_entry2R = Entry(b1_f2, bd =5, width=50)
+
+
+
+
+
+b1_space = Label(button1_frame, text="...", width=100, height=2)
+
+b1_label2 = Label(b1_f2, text="STOCK")
+b1_entry2 = Entry(b1_f2, bd =5, width=50)
+b1_label3 = Label(b1_f3, text="PRICE")
+b1_entry3 = Entry(b1_f3, bd =5, width=50)
+b1_label4 = Label(b1_f4, text="QUANTITY")
+b1_entry4 = Entry(b1_f4, bd =5, width=50)
+b1_label5 = Label(b1_f5, text="DATE")
+b1_entry5 = DateEntry(b1_f5, selectmode="day", bd =5, width=50)
 b1_button = Button(button1_frame, text= "enter", width= 20, command= lambda :print_value(GroupX))
 
 

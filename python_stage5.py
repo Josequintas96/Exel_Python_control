@@ -1,5 +1,7 @@
 import os
 from datetime import date
+import yfinance as yf
+
 
 
 class Group:
@@ -99,6 +101,21 @@ class Group:
         print("\t\tSet up history for all persons")
         for pers in self.PP:
             pers.Person_add_history_onStock()
+            
+    def Group_stock_verification(self, name):
+        gg_info = yf.Ticker(name)
+        info = gg_info.info
+        if info == None:
+            print(f"Cannot get info, it probably does not exist")
+            return False
+        else:
+            return True
+        # if (gg_info.info['regularMarketPrice'] == None):
+        #     raise NameError("You did not input a correct stock ticker! Try again.")
+            
+        # else:
+        #     print("Sotck probably exist")
+            
             
     def Group_take_action(self):
         #using input to do actions
@@ -230,7 +247,11 @@ class Person:
     def Person_add_history_onStock(self):
         #save on each history track
         for x in self.history_track:
-            x.HS_add_history(10)
+            print("\t\t NAME: ", x.name)
+            gg = yf.Ticker(x.name)
+            gg_info = gg.info["regularMarketPrice"]
+            print( x, " VALUE IS ", gg_info  )
+            x.HS_add_history(gg_info)
         
     def Person_insert_stock(self):
         #create Sotck directly on method inside
