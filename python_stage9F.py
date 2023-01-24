@@ -84,6 +84,7 @@ def hide_all_frames():
     input_frame.pack_forget()
     button1_frame.pack_forget()
     button2_frame.pack_forget()
+    button3_frame.pack_forget()
     # b1_label.pack_forget()
     
 def hide_all_control():
@@ -106,32 +107,33 @@ def button1_control(Group_var):
     # pp_l = Group_var.Group_ret_list_persons()
     # b1_p_list.configure( *pp_l )
     
-    b1_f1.pack( expand=True)
+    b1_f1.pack( pady=6, expand=True)
     b1_p_list['menu'].delete(0, 'end')
     pp_l = Group_var.Group_ret_list_persons()
     # var = StringVar()
     for x0 in pp_l:
         b1_p_list['menu'].add_command(label=x0, command= lambda x= x0: b1_variable0.set(x))
-    b1_label.pack(side=LEFT)
-    b1_p_list.pack(side=RIGHT)
+    b1_label.pack( padx=9, side=LEFT)
+    b1_p_list.pack( padx=9, side=RIGHT)
     
     # b1_space.pack()
-    b1_f2.pack( expand=True)
-    b1_label2.pack(side=LEFT)
-    b1_entry2.pack(side=RIGHT)
+    b1_f2.pack( pady=6, expand=True)
+    b1_label2.pack( padx=9, side=LEFT)
+    b1_entry2.pack( padx=9, side=RIGHT)
+    b1_entry2.focus_force() #this line make visible all entries inmideately
     
-    b1_f3.pack( expand=True)
-    b1_label3.pack(side=LEFT)
-    b1_entry3.pack(side=RIGHT)
+    b1_f3.pack( pady=6, expand=True)
+    b1_label3.pack( padx=9, side=LEFT)
+    b1_entry3.pack( padx=9, side=RIGHT)
     
-    b1_f4.pack( expand=True)
-    b1_label4.pack(side=LEFT)
-    b1_entry4.pack(side=RIGHT)
+    b1_f4.pack( pady=6, expand=True)
+    b1_label4.pack( padx=10, side=LEFT)
+    b1_entry4.pack( padx=10, side=RIGHT)
     
-    b1_f5.pack( expand=True)
+    b1_f5.pack( pady=6, expand=True)
     b1_label5.pack(side=LEFT)
     b1_entry5.pack(side=RIGHT)
-    b1_button.pack()
+    b1_button.pack(pady=6)
     
     
     
@@ -148,14 +150,20 @@ def button1_control(Group_var):
 def button2_control(Group_var):
     hide_all_frames()
     button2_frame.pack()
-    b2_label.pack()
-    b2_entry.pack()
-    b2_label2.pack()
-    b2_entry2.pack()
-    b2_button.pack()
+    b2_f1.pack(pady=6)
+    b2_label.pack( padx=9, side=LEFT)
+    b2_entry.pack( padx=9, side=RIGHT)
+    b2_f2.pack(pady=6)
+    b2_label2.pack( padx=9, side=LEFT)
+    b2_entry2.pack( padx=9, side=RIGHT)
+    b2_button.pack(pady=6)
     
 def button3_control(Group_var):
-    Group_var.Group_command_action(2)
+    hide_all_frames()
+    button3_frame.pack()
+    b3_button.pack()
+    b3_button2.pack()
+    # Group_var.Group_command_action(2)
     
     
 def buttonF(Group_var):
@@ -165,6 +173,14 @@ def buttonF(Group_var):
 def buttonF2(Group_var):
     # print("SUPER")
     Group_var.Group_command_action(1)
+    
+def buttonF3(Group_var):
+    # print("SUPER")
+    Group_var.Group_command_action(2)
+    
+def buttonF3_2(Group_var):
+    # print("SUPER")
+    Group_var.Group_command_action(4)
     
 # def update_option_menu(gr):
     # b1_p_list.configure(button1_frame, b1_variable0, *pp_l)
@@ -196,22 +212,26 @@ option_menu.add_command(label="Find Next", command=our_comand)
 
 
 
-file_new_frame = Frame(root, width=600, height=500, bg="red")
-edit_new_frame = Frame(root, width=600, height=500, bg="blue")
-input_frame = Frame(root, width=600, height=500, bg="green")
+file_new_frame = Frame(root, width=600, height=500, )
+edit_new_frame = Frame(root, width=600, height=500,)
+input_frame = Frame(root, width=600, height=500, )
 
 
 
-button_frame = Frame(root, width=600, height=500, bg="green")
-button1_frame = Frame(root, width=600, height=500, bg="green")
+button_frame = Frame(root, width=600, height=500, )
+button1_frame = Frame(root, width=600, height=500, )
+b1_f1 = Frame(button1_frame, width=100, height=100, )
+b1_f2 = Frame(button1_frame, width=100, height=100, )
+b1_f3 = Frame(button1_frame, width=100, height=100, )
+b1_f4 = Frame(button1_frame, width=100, height=100, )
+b1_f5 = Frame(button1_frame, width=100, height=100, )
 
-b1_f1 = Frame(button1_frame, width=100, height=100, bg="red")
-b1_f2 = Frame(button1_frame, width=100, height=100, bg="red")
-b1_f3 = Frame(button1_frame, width=100, height=100, bg="red")
-b1_f4 = Frame(button1_frame, width=100, height=100, bg="red")
-b1_f5 = Frame(button1_frame, width=100, height=100, bg="red")
+button2_frame = Frame(root, width=600, height=500, )
+b2_f1 = Frame(button2_frame, width=100, height=100, )
+b2_f2 = Frame(button2_frame, width=100, height=100, )
 
-button2_frame = Frame(root, width=600, height=500, bg="green")
+button3_frame = Frame(root, width=600, height=500, )
+# b3_f1 = Frame(button3_frame, width=100, height=100, bg="red")
 
 
 button_op1 = Button(button_frame, text= "Insert Stock", width= 20, command= lambda: button1_control(GroupX)).pack(side = LEFT, pady=20)
@@ -222,6 +242,7 @@ button_op3 = Button(button_frame, text= "Record Value", width= 20, command= lamb
 
 button_F = Button(button_frame, text= "Print on Terminal", width= 20, command= lambda: buttonF(GroupX)).pack(side = LEFT, pady=20)
 button_F2 = Button(button_frame, text= "Save on txt", width= 20, command= lambda: buttonF2(GroupX)).pack(side = LEFT, pady=20)
+
 
 button_frame.pack()
 
@@ -256,16 +277,20 @@ b1_label4 = Label(b1_f4, text="QUANTITY")
 b1_entry4 = Entry(b1_f4, bd =5, width=50)
 b1_label5 = Label(b1_f5, text="DATE")
 b1_entry5 = DateEntry(b1_f5, selectmode="day", bd =5, width=50)
-b1_button = Button(button1_frame, text= "enter", width= 20, command= lambda :print_value(GroupX))
+b1_button = Button(button1_frame, text= "enter", width= 25, height=3, command= lambda :print_value(GroupX))
 
 
 #button 2 labels and variables to use
-b2_label = Label(button2_frame, text="PERSON")
-b2_entry = Entry(button2_frame, bd =5, width=100)
-b2_label2 = Label(button2_frame, text="ACRONYMN")
-b2_entry2 = Entry(button2_frame, bd =5, width=100)
-b2_button = Button(button2_frame, text= "Enter New Person", width= 20, command= lambda :Add_person(GroupX, pp_l))
+b2_label = Label(b2_f1, text="PERSON")
+b2_entry = Entry(b2_f1, bd =5, width=50)
+b2_label2 = Label(b2_f2, text="ACRONYMN")
+b2_entry2 = Entry(b2_f2, bd =5, width=50)
+b2_button = Button(button2_frame, text= "Enter New Person", width= 25, height=3, command= lambda :Add_person(GroupX, pp_l))
 
+#button 3 labels and variables to use
+b3_button = Button(button3_frame, text= "Record in History of Value", width= 20, command= lambda: buttonF3(GroupX))
+
+b3_button2 = Button(button3_frame, text= "Erase Record in History of Value", width= 20, command= lambda: buttonF3_2(GroupX))
 
 
 # messagebox.showerror("error", "try again")

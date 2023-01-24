@@ -92,6 +92,19 @@ class Group:
     def Group_add_history_person(self, name, date, price, run_person):
         self.PP[run_person].Person_add_to_track(name, date, price)
     
+    def Group_get_person_history_stocks(self, run_person):
+        if run_person > len(self.PP):
+            return None
+        return self.PP[run_person].Person_stock_list_in_history()
+    
+    def Group_get_person_history_length(self, run_person):
+        #return the number of each person stock history track => how many different stocks has the person (no repetition)
+        return self.PP[run_person].Person_stock_history_length()
+    
+    def Group_get_person_history_track(self, run_person, run_history):
+        #return track of all histoies stored in each history values
+        return self.PP[run_person].Person_history_track_L(run_history)
+    
     def Group_print_group(self):
         for x in self.PP:
             x.Person_print_stock()
@@ -101,6 +114,14 @@ class Group:
         print("\t\tSet up history for all persons")
         for pers in self.PP:
             pers.Person_add_history_onStock()
+            
+    def Group_back_up_history(self):
+        print("\t\Back up history for all persons")
+        for pers in self.PP:
+            pers.Person_back_up_history_onStock()
+            
+
+        
             
     def Group_stock_verification(self, name):
         gg_info = yf.Ticker(name)
@@ -189,6 +210,12 @@ class Group:
         elif choice ==3:
             print("\tPrint info")
             self.Group_print_group()
+            
+        elif choice ==4:
+            print("\tHISTORY was mean to be rewrite")
+            self.Group_back_up_history()
+            
+        
 
 class Person:
     name=""
@@ -252,6 +279,11 @@ class Person:
             gg_info = gg.info["regularMarketPrice"]
             print( x, " VALUE IS ", gg_info  )
             x.HS_add_history(gg_info)
+            
+    def Person_back_up_history_onStock(self):
+        for x in self.history_track:
+            x.HS_erase_history()
+        
         
     def Person_insert_stock(self):
         #create Sotck directly on method inside
@@ -293,6 +325,27 @@ class Person:
             self.Person_find_and_add_on_track(name, date, price)
         else:
             self.Person_find_and_add_on_track(name, date, price)
+            
+    def Person_stock_list_in_history(self):
+        HS_stockL= []
+        if len(self.history_track) > 0:
+            # print("VVVVV")
+            HS_stockL.append(self.history_track[0].name)
+            if len(self.history_track) > 1:
+                # print("VVVVVVVVV")
+                i=1
+                while i < len(self.history_track):
+                    HS_stockL.append(self.history_track[i].name)
+                    i+=1
+        return HS_stockL
+    
+    def Person_history_track_L(self, run_history):
+        #return history of certain value
+        return self.history_track[run_history].HS_get_history_list()
+    
+    def Person_stock_history_length(self):
+        
+        return len(self.history_track)
             
     def Person_find_and_add_on_track(self, name, date, price):
         print("Find and add on track list")
@@ -384,6 +437,9 @@ class history_Stocks:
         hist0 = (str(dateX), value)
         self.history.append(hist0)
         
+    def HS_erase_history(self):
+        self.history.pop()
+        
     def HS_get_value_hist(self, run_t):
         if len(self.history) == 0:
             strX = self.name + " No Stock History\n"
@@ -393,6 +449,9 @@ class history_Stocks:
             return strX
         strX = self.name + " " + str(self.history[run_t][0]) + " " + str(self.history[run_t][1]) + "\n"
         return strX
+    
+    def HS_get_history_list(self):
+        return self.history
     
 
 # nameX = input("Insert a stock: " )
