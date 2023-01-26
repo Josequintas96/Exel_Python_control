@@ -121,6 +121,9 @@ class Group:
             pers.Person_back_up_history_onStock()
             
 
+    def Group_get_person_stock_per_name(self, run_person, stock_name):
+        #return list with all stocks price and ate with specific name
+        return self.PP[run_person].Person_get_all_stock_per_name(stock_name)
         
             
     def Group_stock_verification(self, name):
@@ -131,11 +134,7 @@ class Group:
             return False
         else:
             return True
-        # if (gg_info.info['regularMarketPrice'] == None):
-        #     raise NameError("You did not input a correct stock ticker! Try again.")
-            
-        # else:
-        #     print("Sotck probably exist")
+        
             
             
     def Group_take_action(self):
@@ -276,9 +275,13 @@ class Person:
         for x in self.history_track:
             print("\t\t NAME: ", x.name)
             gg = yf.Ticker(x.name)
-            gg_info = gg.info["regularMarketPrice"]
+            gg.history(period="max")
+            # gg_info = gg.info["regularMarketPrice"]
+            gg_info = gg.history_metadata["regularMarketPrice"]
+            
             print( x, " VALUE IS ", gg_info  )
-            x.HS_add_history(gg_info)
+            dateX = date.today()
+            x.HS_add_history(dateX, gg_info)
             
     def Person_back_up_history_onStock(self):
         for x in self.history_track:
@@ -343,15 +346,31 @@ class Person:
         #return history of certain value
         return self.history_track[run_history].HS_get_history_list()
     
-    def Person_stock_history_length(self):
+    def Person_get_all_stock_per_name(self, stock_name):
+        #retrun list of all stock value and date with same name
+        pp_S = []
         
+        for x in self.stocks:
+            if x.name == stock_name:
+                cart = []
+                cart.append(x.name)
+                cart.append(x.quantity)
+                cart.append(x.cost)
+                cart.append(x.date)
+                
+                pp_S.append(cart)
+        return pp_S
+                
+                
+    
+    def Person_stock_history_length(self):
         return len(self.history_track)
             
     def Person_find_and_add_on_track(self, name, date, price):
         print("Find and add on track list")
         for x in self.history_track:
             if name == x.name:
-                x.HS_add_history(price)
+                x.HS_add_history(date, price)
     
     
     def Person_print_stock(self):
@@ -383,6 +402,7 @@ class Person:
 
 class Stocks:
     name =""
+    full_name = ""
     date = ""
     quantity = 0
     cost = 0
@@ -432,8 +452,9 @@ class history_Stocks:
     def HS_get_len(self):
         return len(self.history)
         
-    def HS_add_history(self, value):
-        dateX = date.today()
+    def HS_add_history(self, dateX, value):
+        # dateX = date.today()
+        dateX = dateX
         hist0 = (str(dateX), value)
         self.history.append(hist0)
         
@@ -453,53 +474,3 @@ class history_Stocks:
     def HS_get_history_list(self):
         return self.history
     
-
-# nameX = input("Insert a stock: " )
-# quantityX = input("How many: " )
-# priceX = input("Cost of each: " )
-# dateX = input("Date brought: " )
-# stockX = Stocks()
-# stockX.Stock_insert_stock()
-# stockX.print_stock_value()
-# # stockX =  Stocks(nameX, quantityX, dateX, priceX)
-
-# choice = input("What to do?")
-# print("1. save value on txt")
-# if int(choice) == 1:
-#     f = open("\stocks2.txt", "w")
-#     strX = stockX.Stock_get_name() + " " + str(stockX.Stock_get_quantity()) + " " + str(stockX.Stock_get_price()) + " " + stockX.Stock_get_date() +"\n"
-#     f.write(strX)
-    
-# pp = Person()
-# pp.Person_insert_name()
-# pp.Stock_insert_stock()
-# pp.Person_print_stock()
-
-
-# gg = Group()
-# pp1 = Person()
-# pp1.Person_insert_name_acronym("Pablo", "PB")
-# pp1.Person_add_stock("PSY", 10, 12, "12/09/2022")
-# pp1.Person_add_stock("DISN", 1, 120, "12/01/2022")
-# gg.Group_insert_person(pp1)
-
-# pp2 = Person()
-# pp2.Person_insert_name_acronym("Yetta", "YT")
-# pp2.Person_add_stock("POT", 8, 40, "10/09/2020")
-# pp2.Person_add_stock("SEN", 2, 35, "08/01/2019")
-# gg.Group_insert_person(pp2)
-# # gg.Group_Create_New_Person()
-# # gg.Group_insert_person(pp)
-# # gg.Group_Create_New_Person()
-# gg.Group_print_group()
-# gg.Group_take_action()
-
-    
-    
-    
-
-
-
-    
-
-

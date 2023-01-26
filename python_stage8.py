@@ -31,7 +31,7 @@ def control_Group(Groupx):
                 print("Super Acronym")
                 
             elif y2[0] == "!ST:":
-                print("HISTORYXX")
+                print("HISTORYXX: ", y2[2])
                 Groupx.Group_add_history_person( y2[1], y2[2], y2[3], run_length-1)
                 # print(y2)
             else:
@@ -40,11 +40,13 @@ def control_Group(Groupx):
                 # gg = yf.Ticker(tt)
                 print(tt)
                 
-                gg_info = 100
+                gg_price = float(y2[2])
                 # gg.info["regularMarketPrice"]
-                print(y2[0], ": $", gg_info)
+                print(y2[0], ": $", gg_price)
                 
-                Groupx.Group_add_stock_person(y2[0], gg_info, 1, str(time_date), run_length-1)
+                gg_quantity = int(y2[1])
+                
+                Groupx.Group_add_stock_person(y2[0], gg_price, gg_quantity, str(y2[3]), run_length-1)
                 y3.append(y2)
                 print("STOCK")
 

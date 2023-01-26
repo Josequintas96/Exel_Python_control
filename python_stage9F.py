@@ -3,6 +3,7 @@ from tkcalendar import DateEntry
 from tkinter import messagebox
 from python_stage8 import control_Group
 from python_stage5 import Group
+from python_stage10 import *
 
 
 root = Tk()
@@ -178,6 +179,9 @@ def buttonF3(Group_var):
     # print("SUPER")
     Group_var.Group_command_action(2)
     
+def buttonFE(Group_var):
+    Exel_production(Group_var)
+    
 def buttonF3_2(Group_var):
     # print("SUPER")
     Group_var.Group_command_action(4)
@@ -242,6 +246,7 @@ button_op3 = Button(button_frame, text= "Record Value", width= 20, command= lamb
 
 button_F = Button(button_frame, text= "Print on Terminal", width= 20, command= lambda: buttonF(GroupX)).pack(side = LEFT, pady=20)
 button_F2 = Button(button_frame, text= "Save on txt", width= 20, command= lambda: buttonF2(GroupX)).pack(side = LEFT, pady=20)
+button_F3 = Button(button_frame, text= "Save on Exel", width= 20, command= lambda: buttonFE(GroupX)).pack(side = LEFT, pady=20)
 
 
 button_frame.pack()

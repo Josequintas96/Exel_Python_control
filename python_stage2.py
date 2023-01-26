@@ -4,8 +4,17 @@ print("Hello")
 
 gg = yf.Ticker("DIS")
 
-gg_info = gg.info["regularMarketPrice"]
+gg.history(period="max")
 
-print("Docu: ", gg_info)
+gg_in = gg.history_metadata["regularMarketPrice"]
+
+print("PP: ", gg_in)
+
+# gg_info = gg.info["regularMarketPrice"]
+# gg_name = gg.info['marketCap']
+
+# print("Docu: ", gg_info)
+# print("Name: ", gg_name)
+
 
 
