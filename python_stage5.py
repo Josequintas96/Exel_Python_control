@@ -93,6 +93,7 @@ class Group:
         self.PP[run_person].Person_add_to_track(name, date, price)
     
     def Group_get_person_history_stocks(self, run_person):
+        #return all stocks in person using the history track, no repetition
         if run_person > len(self.PP):
             return None
         return self.PP[run_person].Person_stock_list_in_history()
@@ -330,6 +331,7 @@ class Person:
             self.Person_find_and_add_on_track(name, date, price)
             
     def Person_stock_list_in_history(self):
+        #return a list with all possible stocks considering list, no repetiton
         HS_stockL= []
         if len(self.history_track) > 0:
             # print("VVVVV")
