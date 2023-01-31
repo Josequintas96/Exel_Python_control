@@ -28,6 +28,9 @@ def print_value(Group_var):
     ent3 = b1_entry3.get()  #price variable
     print(ent3)
     b1_entry3.delete(0,END) 
+    # ent2_5 = b1_entry2_5.get()  #price variable
+    # print(ent2_5)
+    # b1_entry2_5.delete(0,END) 
     ent4 = b1_entry4.get() #quantity variable
     print(ent4)
     b1_entry4.delete(0,END) 
@@ -123,9 +126,14 @@ def button1_control(Group_var):
     b1_entry2.pack( padx=9, side=RIGHT)
     b1_entry2.focus_force() #this line make visible all entries inmideately
     
+    # b1_f2_5.pack( pady=6, expand=True)
+    # b1_label2_5.pack( padx=9, side=LEFT)
+    # b1_entry2_5.pack( padx=9, side=RIGHT)
+    
     b1_f3.pack( pady=6, expand=True)
     b1_label3.pack( padx=9, side=LEFT)
     b1_entry3.pack( padx=9, side=RIGHT)
+    
     
     b1_f4.pack( pady=6, expand=True)
     b1_label4.pack( padx=10, side=LEFT)
@@ -226,6 +234,7 @@ button_frame = Frame(root, width=600, height=500, )
 button1_frame = Frame(root, width=600, height=500, )
 b1_f1 = Frame(button1_frame, width=100, height=100, )
 b1_f2 = Frame(button1_frame, width=100, height=100, )
+# b1_f2_5 = Frame(button1_frame, width=100, height=100, )
 b1_f3 = Frame(button1_frame, width=100, height=100, )
 b1_f4 = Frame(button1_frame, width=100, height=100, )
 b1_f5 = Frame(button1_frame, width=100, height=100, )
@@ -276,6 +285,8 @@ b1_space = Label(button1_frame, text="...", width=100, height=2)
 
 b1_label2 = Label(b1_f2, text="STOCK")
 b1_entry2 = Entry(b1_f2, bd =5, width=50)
+# b1_label2_5 = Label(b1_f2_5, text="NAME")
+# b1_entry2_5 = Entry(b1_f2_5, bd =5, width=50)
 b1_label3 = Label(b1_f3, text="PRICE")
 b1_entry3 = Entry(b1_f3, bd =5, width=50)
 b1_label4 = Label(b1_f4, text="QUANTITY")

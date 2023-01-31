@@ -89,6 +89,9 @@ class Group:
     def Group_add_stock_person(self, name, cost, quantity, date, run_person):
         self.PP[run_person].Person_add_stock(name, cost, quantity, date)
         
+    def Group_add_full_stock_person(self, name, cost, quantity, date, full_name, run_person):
+        self.PP[run_person].Person_add_full_stock(name, cost, quantity, date, full_name)
+        
     def Group_add_history_person(self, name, date, price, run_person):
         self.PP[run_person].Person_add_to_track(name, date, price)
     
@@ -97,6 +100,12 @@ class Group:
         if run_person > len(self.PP):
             return None
         return self.PP[run_person].Person_stock_list_in_history()
+    
+    def Group_get_full_name_for_stock_list(self, run_person , stock_list):
+        #return all stocks in person using the history track, no repetition
+        if  run_person > len(self.PP):
+            return None
+        return self.PP[run_person].Person_get_full_name_for_stock_list(stock_list)
     
     def Group_get_person_history_length(self, run_person):
         #return the number of each person stock history track => how many different stocks has the person (no repetition)
@@ -123,7 +132,7 @@ class Group:
             
 
     def Group_get_person_stock_per_name(self, run_person, stock_name):
-        #return list with all stocks price and ate with specific name
+        #return list with all stocks price and date with specific name
         return self.PP[run_person].Person_get_all_stock_per_name(stock_name)
         
             
@@ -187,12 +196,13 @@ class Group:
         
         if choice == 1:
             print("\tSAVE FILE was chosen")
+            #you are writing all your info in a txt file
             f = open(os.path.join('Exel_Python_control', "stocks3.txt"), "w")
             for x in self.PP:
                 f.write("Person: " + x.name+"\n")
                 f.write("Acronym: " + x.acronym+"\n")
                 for stockX in x.stocks:
-                    strX = stockX.Stock_get_name() + " " + str(stockX.Stock_get_quantity()) + " " + str(stockX.Stock_get_price()) + " " + stockX.Stock_get_date() +"\n"
+                    strX = stockX.Stock_get_name() + " " + str(stockX.Stock_get_quantity()) + " " + str(stockX.Stock_get_price()) + " " + stockX.Stock_get_date() + " " + stockX.Stock_get_txt_full_name() +"\n"
                     f.write(strX)   
                 for histX in x.history_track:
                     if len(histX.history)>0:
@@ -304,6 +314,17 @@ class Person:
     def Person_add_stock(self, name, cost, quantity, date):
         #give person a stock by parameters
         stockX = Stocks(name, cost, quantity, date)
+        stockX.Stock_set_Yahoo_full_name()
+        self.stocks.append(stockX)
+        if self.Person_is_on_track(name):
+            print("\t\t new stock")
+        else:
+            print("\t\tRepeated stock")
+            
+    def Person_add_full_stock(self, name, cost, quantity, date, full_name):
+        #give person a stock by parameters
+        stockX = Stocks(name, cost, quantity, date)
+        stockX.Stock_set_full_name(full_name)
         self.stocks.append(stockX)
         if self.Person_is_on_track(name):
             print("\t\t new stock")
@@ -344,6 +365,19 @@ class Person:
                     i+=1
         return HS_stockL
     
+    def Person_get_full_name_for_stock_list(self, stock_list):
+        HS_stock_name = []
+        i0 =0
+        while i0 < len(stock_list):
+            i1=0
+            while i1 < len(self.stocks):
+                if self.stocks[i1].name == stock_list[i0]:
+                    HS_stock_name.append(self.stocks[i1].full_name)
+                    i1 = len(self.stocks)
+                i1+=1
+            i0+=1
+        return HS_stock_name
+    
     def Person_history_track_L(self, run_history):
         #return history of certain value
         return self.history_track[run_history].HS_get_history_list()
@@ -359,6 +393,7 @@ class Person:
                 cart.append(x.quantity)
                 cart.append(x.cost)
                 cart.append(x.date)
+                cart.append(x.full_name)
                 
                 pp_S.append(cart)
         return pp_S
@@ -430,12 +465,35 @@ class Stocks:
     
     def Stock_get_date(self):
         return self.date
+    
+    def Stock_get_full_name(self):
+        return self.full_name
+    
+    def Stock_get_txt_full_name(self):
+        n = self.full_name.split()
+        full_n = n[0]
+        if len(n) > 1:
+            i0=1
+            while i0 < len(n):
+                full_n = full_n + "_" + n[i0]
+                i0+=1
+        print("\t\tSSS: ", full_n)
+        return full_n
         
     def Stock_print_stock_value(self):
         print("\tThese are the Stocks")
         print("\tName: ", self.name )
+        print("\tFull name: ", self.full_name)
         print("\tQuantity: ", self.quantity)
         print("\tDate bought: ", self.date)
+        
+    def Stock_set_Yahoo_full_name(self):
+        gg = yf.Ticker(self.name)
+        gg_name = gg.info['longName']
+        self.full_name = gg_name 
+        
+    def Stock_set_full_name(self, name):
+        self.full_name = name 
         
     def Stock_insert_stock(self):
         self.name = input("Insert a stock: " )

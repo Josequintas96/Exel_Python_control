@@ -46,7 +46,18 @@ def control_Group(Groupx):
                 
                 gg_quantity = int(y2[1])
                 
-                Groupx.Group_add_stock_person(y2[0], gg_price, gg_quantity, str(y2[3]), run_length-1)
+                gg_f_1 = y2[4]
+                gg_f_2 = gg_f_1.split("_")
+                gg_full_name = gg_f_2[0]
+                if len(gg_f_2) > 1:
+                    i0=1
+                    while i0 < len(gg_f_2):
+                        gg_full_name += " "
+                        gg_full_name += gg_f_2[i0]
+                        i0+=1
+                print(y2[4], ": fullname :   ", gg_full_name)
+                   
+                Groupx.Group_add_full_stock_person(y2[0], gg_price, gg_quantity, str(y2[3]), gg_full_name, run_length-1)
                 y3.append(y2)
                 print("STOCK")
 

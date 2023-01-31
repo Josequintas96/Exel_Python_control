@@ -5,6 +5,9 @@ from python_stage5 import Person, Stocks, Group
 # import pandas as pdb
 import os
 from python_stage8 import control_Group
+from datetime import date
+
+
 
 
 
@@ -25,20 +28,21 @@ row=1
 print("Length of Group Person: ", GroupX.Group_get_num_persons_stocks(person) )
 while person < GroupX.Group_get_num_persons():
     
-    cell_border_full = workbook.add_format()
-    cell_border_full.set_border(style=2)
+    cell_border_full = workbook.add_format({'border': 2, 'center_across': True, 'valign': 'vcenter' })
+    # cell_border_full.set_border(style=2)
     
-    cell_border_full_brown = workbook.add_format()
-    cell_border_full_brown.set_border(style=2)
-    cell_border_full_brown.set_color("brown")
-    
+    cell_border_full_brown = workbook.add_format({'border': 2, 'color': 'brown', 'center_across': True, 'valign': 'vcenter' })
+    cell_simple = workbook.add_format({'center_across': True, 'valign': 'vcenter' })
     
     
-    cell_color_b = workbook.add_format()
-    cell_color_b.set_color('blue')
+    
+    cell_color_b = workbook.add_format({"color": 'blue', 'center_across': True, 'valign': 'vcenter' })
+    # cell_color_b.set_color('blue')
     
     
     worksheet = workbook.add_worksheet(GroupX.Group_get_persons_acronym(person))
+    # 
+
     stockX =0
     row =2
     print("\tLength of Person Stocks: ", GroupX.Group_get_person_history_length(stockX) )
@@ -63,24 +67,30 @@ while person < GroupX.Group_get_num_persons():
 
 #///////////////////////////////////////////////////////////////////////////////////////////////        
 #///////////////////////////////////////////////////////////////////////////////////////////////        
-        cell_stock_title = workbook.add_format({'bg_color': '#82CAFF'})
-        cell_stock_title.set_font_color("#123456")
-        cell_stock_title.set_font_size(16)
+        cell_stock_title = workbook.add_format({'bg_color': '#82CAFF' , 'text_wrap': True, 'font_color':"#123456", 'font_size': 16 , 'border': 2, 'center_across': True, 'valign': 'vcenter'  })
+        # cell_stock_title.set_font_color("#123456")
+        # cell_stock_title.set_font_size(16)
         
+        pp_S = GroupX.Group_get_person_stock_per_name(person, pp_l[i1]) #repeated stocks on person in order of list name, quatity, cost, date, full_name
         valor_stock = 0 #stock cost multiply by number of them
+        
+        worksheet.set_column(column, column, 20) #adjust width of cell
+        worksheet.write(row,column, pp_S[0][4], cell_stock_title)
         worksheet.write(row,column+1, pp_l[i1], cell_stock_title)
         row+=1
-        pp_S = GroupX.Group_get_person_stock_per_name(person, pp_l[i1]) #repeated stocks on person in order of list name, quatity, cost, date
+        
         for iP in pp_S:
-            worksheet.write(row,column-1, str(iP[1]) + " stocks" ) #quantity
+            worksheet.write(row,column-1, str(iP[1]) + " stocks" , cell_simple) #quantity
             total_qu += iP[1]
-            worksheet.write(row ,column, iP[3] ) # date    
+            worksheet.write(row ,column, iP[3] , cell_simple) # date    
             worksheet.write(row ,column+1, iP[2], cell_border_full_brown ) #cost
             total_pri += iP[2]
             valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
             row+=1
         worksheet.write(row,column-1, str(total_qu) + " stocks" , cell_color_b)
-        worksheet.write(row ,column, "Today" )
+        
+        dateX = date.today()
+        worksheet.write(row ,column, str(dateX) , cell_simple)
         worksheet.write(row ,column+1, total_pri , cell_border_full_brown)
         row+=2
         worksheet.write(row ,column+2, "Promedio", cell_border_full_brown )
@@ -92,7 +102,7 @@ while person < GroupX.Group_get_num_persons():
         row_n = row -5
         
         
-        print("This are all the repeated stocks:  ", pp_S)
+        # print("This are all the repeated stocks:  ", pp_S)
         
         
 #///////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,11 +115,11 @@ while person < GroupX.Group_get_num_persons():
 
         
         # title for history table
-        worksheet.write(row,column, "$" )
-        worksheet.write(row,column+1, "7%" )
-        worksheet.write(row,column+2, "11%" )
-        worksheet.write(row,column+3, "15%" )
-        worksheet.write(row,column+4, "20%" )
+        worksheet.write(row,column, "$", cell_simple )
+        worksheet.write(row,column+1, "7%", cell_simple )
+        worksheet.write(row,column+2, "11%" , cell_simple)
+        worksheet.write(row,column+3, "15%" , cell_simple )
+        worksheet.write(row,column+4, "20%" , cell_simple )
         #this section is to print the history track with algorithm
         hh_l = GroupX.Group_get_person_history_track(person, i1)
         i2 =0
@@ -120,12 +130,12 @@ while person < GroupX.Group_get_num_persons():
         while x < len(pp_S):
             stock_p.append(False)
             x+=1
-            
+        worksheet.set_column(1, 1, 10) #adjust width of cell for dates
         while i2 < len(hh_l):
             column =1
-            worksheet.write(row,column, hh_l[i2][0] ) 
+            worksheet.write(row,column, hh_l[i2][0], cell_simple ) 
             # worksheet.write(row,column, pp_l[i1] )        
-            worksheet.write(row,column+1, hh_l[i2][1] ) 
+            worksheet.write(row,column+1, hh_l[i2][1], cell_simple ) 
             
             
             var2 = "=("+str(hh_l[i2][1])+"*"+ "0.07)"+"+"+str(hh_l[i2][1])
@@ -191,7 +201,7 @@ while person < GroupX.Group_get_num_persons():
                         cell_format.set_font_color('blue')
                     worksheet.write(row,column+2, round(var2, 2), cell_format)
                     column+=1
-                    print("Verifying last cost: ", run_0)
+                    # print("Verifying last cost: ", run_0)
                     if run_0 == len(hh_l)-1:
                         last_cost.append(var2)
                     x+=1
@@ -211,18 +221,18 @@ while person < GroupX.Group_get_num_persons():
 
 #///////////////////////////////////////////////////////////////////////////////////////////////        
 #///////////////////////////////////////////////////////////////////////////////////////////////        
-        cell_format_r = workbook.add_format({'color': 'red'})
-        cell_format_b = workbook.add_format({'color': 'blue'})
-        cell_format_rL = workbook.add_format({'color': 'red', 'top': 2, 'bottom': 2})
-        cell_format_bL = workbook.add_format({'color': 'blue', 'top': 2, 'bottom': 2})
-        cell_format_p = workbook.add_format({'color': 'purple', 'top': 2, 'bottom': 2, 'left': 2})
-        cell_format_pL = workbook.add_format({'color': 'purple', 'top': 2, 'bottom': 2, 'right':2})
+        cell_format_r = workbook.add_format({'color': 'red', 'center_across': True,})
+        cell_format_b = workbook.add_format({'color': 'blue', 'center_across': True,})
+        cell_format_rL = workbook.add_format({'color': 'red', 'top': 2, 'bottom': 2, 'center_across': True,})
+        cell_format_bL = workbook.add_format({'color': 'blue', 'top': 2, 'bottom': 2, 'center_across': True,})
+        cell_format_p = workbook.add_format({'color': 'purple', 'top': 2, 'bottom': 2, 'left': 2, 'center_across': True,})
+        cell_format_pL = workbook.add_format({'color': 'purple', 'top': 2, 'bottom': 2, 'right':2, 'center_across': True,})
         
         total_of_each_stock = 0
         xx=0
         for i5 in pp_S:
-            cell_cream = workbook.add_format({'bg_color': '#FFFFCC', 'align': 'center'})
-            cell_gray = workbook.add_format({'bg_color': '#E8E4C9'})
+            cell_cream = workbook.add_format({'bg_color': '#FFFFCC', 'align': 'center', 'center_across': True,})
+            cell_gray = workbook.add_format({'bg_color': '#E8E4C9', 'center_across': True,})
             merge_row = row_n+runT
             merge_column = column+3
             worksheet.merge_range(merge_row,merge_column,merge_row,merge_column+2, "Se compro en: " + i5[3], cell_cream ) 
@@ -232,7 +242,7 @@ while person < GroupX.Group_get_num_persons():
             var3 = float(i5[2])
             ind = int(runT/4)
             var2 = (var3*i5[1])*(last_cost[ind]/100)
-            print("(", var3, "*", i5[1], ")*(", last_cost[ind], "/100)" )
+            # print("(", var3, "*", i5[1], ")*(", last_cost[ind], "/100)" )
             if var2 < 0:
                 # cell_format.set_font_color('red')
                 worksheet.write(row_n+runT+2,column+4, round(var2, 2) , cell_format_rL)
@@ -265,32 +275,33 @@ while person < GroupX.Group_get_num_persons():
         total = total_of_each_stock
         if total < 0:
             # cell_format.set_font_color('red')
-            cell_border_full_cream = workbook.add_format({'bg_color': '#FFFFCC'})
+            cell_border_full_cream = workbook.add_format({'bg_color': '#FFFFCC', 'center_across': True,})
             cell_border_full_cream.set_border(style=2)
             cell_border_full_cream.set_font_color('red')
             cell_border_full_cream.set_font_size(13)
             worksheet.write(row_n+runT+2,column+6, round(total, 2) , cell_border_full_cream)
         else:
             # cell_format.set_font_color('blue')
-            cell_border_full_cream = workbook.add_format({'bg_color': '#FFFFCC'})
+            cell_border_full_cream = workbook.add_format({'bg_color': '#FFFFCC', 'text_wrap': True , 'center_across': True,})
             cell_border_full_cream.set_border(style=2)
             cell_border_full_cream.set_font_color('blue')
             cell_border_full_cream.set_font_size(13)
             worksheet.write(row_n+runT+2,column+6, round(total, 2) , cell_border_full_cream)
             
         
-        cell_table_up_cornerL = workbook.add_format({'font_color': 'purple', 'left': 2, 'top': 2 })
-        cell_table_up_cornerR = workbook.add_format({'font_color': 'purple', 'right': 2, 'top': 2 })
-        cell_table_right_size = workbook.add_format({'font_color': 'purple', 'right': 2 })
-        cell_table_left_size = workbook.add_format({'font_color': 'purple', 'left': 2 , 'text_wrap': True})
-        cell_table_down_cornerL = workbook.add_format({'font_color': 'purple', 'left': 2, 'bottom': 2, 'text_wrap': True })
+        cell_table_up_cornerL = workbook.add_format({'font_color': 'purple', 'left': 2, 'top': 2, 'text_wrap': True, 'center_across': True })
+        cell_table_up_cornerR = workbook.add_format({'font_color': 'purple', 'right': 2, 'top': 2 , 'text_wrap': True, 'center_across': True})
+        cell_table_right_size = workbook.add_format({'font_color': 'purple', 'right': 2 , 'text_wrap': True, 'center_across': True,})
+        cell_table_left_size = workbook.add_format({'font_color': 'purple', 'left': 2 , 'text_wrap': True, 'center_across': True,})
+        cell_table_down_cornerL = workbook.add_format({'font_color': 'purple', 'left': 2, 'bottom': 2, 'text_wrap': True , 'center_across': True,})
         
         
         
         worksheet.write(row_n+runT+5,column+6, "Valor" , cell_table_up_cornerL)
         worksheet.write(row_n+runT+5,column+7, round(valor_stock, 2)  , cell_table_up_cornerR)
         
-        worksheet.write(row_n+runT+6,column+6, "Today Date" , cell_table_left_size)
+        
+        worksheet.write(row_n+runT+6,column+6, "" , cell_table_left_size)
         worksheet.write(row_n+runT+6,column+7, "" , cell_table_right_size)
         
         worksheet.write(row_n+runT+7,column+6, "Total perdida" ,cell_table_down_cornerL )
@@ -353,27 +364,39 @@ while person < GroupX.Group_get_num_persons():
     row+=6
     
     columnT =2
-    worksheet.write(row,columnT+1, "Nro. Acciones" )
-    worksheet.write(row,columnT+2, "Costo" )
-    worksheet.write(row,columnT+3, "Total" )
-    worksheet.write(row,columnT+4, "% Cartera" ) 
+    cell_stock_title = workbook.add_format({'bold': True, 'font_color': '#123456', 'font_size': 12 })
+    worksheet.write(row,columnT+2, "Nro. Acciones" , cell_stock_title)
+    worksheet.write(row,columnT+3, "Costo", cell_stock_title )
+    worksheet.write(row,columnT+4, "Total" , cell_stock_title)
+    worksheet.write(row,columnT+5, "% Cartera", cell_stock_title )
+    
+    
+    cell_stock_name = workbook.add_format({'bg_color': '#82CAFF' , 'text_wrap': True, 'border': 2, 'font_color': '#123456', 'font_size': 16 })
+    cell_stock_details = workbook.add_format({'text_wrap': True, 'border': 2, 'center_across': True, 'valign': 'vcenter' })
+
+        
+    valor_stock = 0 #stock cost multiply by number of them
     i9 = 0
     row+=1
     total_perc=0
+    pp_t = GroupX.Group_get_full_name_for_stock_list(person, pp_l)
+    print("Full NAME: ", pp_t)
     # cell_Final_table_name
     while i9 < len(pp_l):
-        worksheet.write(row,columnT, pp_l[i9] )
-        worksheet.write(row,columnT+1, round(total_qu_list[i9],2) )
-        worksheet.write(row,columnT+2, round(promedio_list[i9],2) )
-        worksheet.write(row,columnT+3, round(valor_stock_list[i9],2) )
+        worksheet.set_column(columnT, columnT, 20) #adjust width of cell
+        worksheet.write(row,columnT, pp_t[i9], cell_stock_name )
+        worksheet.write(row,columnT+1, pp_l[i9], cell_stock_details )
+        worksheet.write(row,columnT+2, round(total_qu_list[i9],2), cell_stock_details )
+        worksheet.write(row,columnT+3, round(promedio_list[i9],2), cell_stock_details )
+        worksheet.write(row,columnT+4, round(valor_stock_list[i9],2), cell_stock_details )
         perc_cartera = (valor_stock_list[i9]/cartera_value)*100
         total_perc+=perc_cartera
-        worksheet.write(row,columnT+4, round(perc_cartera,2) )  
+        worksheet.write(row,columnT+5, round(perc_cartera,2), cell_stock_details )  
         row+=1      
         i9+=1
-    worksheet.write(row,columnT+3, round(cartera_value,2) )
+    worksheet.write(row,columnT+4, round(cartera_value,2) )
     #  perc_cartera = (valor_stock_list[i9]/cartera_value)*100
-    worksheet.write(row,columnT+4, round(total_perc,2) )  
+    worksheet.write(row,columnT+5, round(total_perc,2) )  
     
         
     person+=1
