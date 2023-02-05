@@ -97,6 +97,8 @@ class Group:
     
     def Group_get_person_history_stocks(self, run_person):
         #return all stocks in person using the history track, no repetition
+        if run_person < 0:
+            return None
         if run_person > len(self.PP):
             return None
         return self.PP[run_person].Person_stock_list_in_history()
@@ -134,7 +136,15 @@ class Group:
     def Group_get_person_stock_per_name(self, run_person, stock_name):
         #return list with all stocks price and date with specific name
         return self.PP[run_person].Person_get_all_stock_per_name(stock_name)
-        
+    
+    
+    def Group_get_peron_run_person(self, person_name):
+        i0=0
+        while i0<len(self.PP):
+            if self.PP[i0].name == person_name:
+                return i0
+            i0+=1
+        return None
             
     def Group_stock_verification(self, name):
         gg_info = yf.Ticker(name)
@@ -144,8 +154,16 @@ class Group:
             return False
         else:
             return True
+    
+    def Group_delete_stock(self, person_name, stock_name, quantity):
+        print("Delete Stock of Person  => ", person_name)
+        print("Delete Stock  => ", stock_name)
+        print("Delete Stock  => ", int(quantity))
+         
+        run_person = self.Group_get_peron_run_person(person_name)
+        self.PP[run_person].Person_delete_Stock(stock_name, int(quantity))
         
-            
+    
             
     def Group_take_action(self):
         #using input to do actions
@@ -344,6 +362,29 @@ class Person:
             self.history_track.append(sh1)
             return True
         
+    def Person_delete_track(self, name):
+        if len(self.history_track) == 0:
+            return False
+        i0 =0
+        while i0< len(self.history_track):
+            print("HS__")
+            if self.history_track[i0].name == name:
+                del self.history_track[i0]
+                print("This track should have been erase")
+                break
+            i0+=1
+        
+        return True
+        
+    def Person_stock_exist(self, stock_name):
+        i0 =0
+        while i0 < len(self.stocks):
+            if self.stocks[i0].name == stock_name:
+                return True
+            i0+=1
+        return False
+        
+        
     def Person_add_to_track(self, name, date, price):
         if self.Person_is_on_track(name):
             #IF DO NOT EXIST, THEN IT IS CREATED AND NOW ADD VALUE
@@ -408,7 +449,31 @@ class Person:
         for x in self.history_track:
             if name == x.name:
                 x.HS_add_history(date, price)
-    
+                
+    def Person_delete_Stock(self, name_stock, stock_quantity):
+        i0 = 0
+        while i0 < len(self.stocks):
+            if self.stocks[i0].name == name_stock:
+                stock_quantity = self.stocks[i0].Stock_reduce_quantity(stock_quantity)
+                    
+                if self.stocks[i0].quantity <= 0:
+                    print("To erase the stock: ", len(self.stocks))
+                    del self.stocks[i0]
+                    print("To erase the stock: ", len(self.stocks))
+                    i0-=1
+                    
+                if stock_quantity <0:
+                    stock_quantity = -stock_quantity
+                elif stock_quantity >=0:
+                    i0 = len(self.stocks)
+                    break;
+            i0+=1
+            
+        if self.Person_stock_exist(name_stock) == False:
+            print("We are erasing the Stock")
+            self.Person_delete_track(name_stock)
+        
+        
     
     def Person_print_stock(self):
         print(self.name , "(" , self.acronym, ")")
@@ -456,6 +521,10 @@ class Stocks:
         
     def Stock_get_name(self):
         return self.name
+    
+    def Stock_reduce_quantity(self, quantity):
+        self.quantity -= quantity
+        return self.quantity
     
     def Stock_get_quantity(self):
         return self.quantity
