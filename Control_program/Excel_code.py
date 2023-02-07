@@ -1,9 +1,9 @@
 import xlsxwriter
 from datetime import date
-from python_stage5 import Person, Stocks, Group
+from Group import Person, Stocks, Group
 # import pandas as pdb
 import os
-from python_stage8 import control_Group
+from read_file import control_Group
 
 
 
@@ -17,7 +17,9 @@ from python_stage8 import control_Group
 
 def Exel_production(GroupX):
 #add on Excel
-    workbook = xlsxwriter.Workbook('hello.xlsx')
+
+    # workbook = xlsxwriter.Workbook('hello.xlsx')
+    workbook = xlsxwriter.Workbook(os.path.join('Exel_Python_control/Control_program', 'Tabla_de_Acciones.xlsx'))
     content = [1,2,3,4,5]
     person =0
     row=1
@@ -410,3 +412,6 @@ def Exel_production(GroupX):
 
     # print("FINISHED")
     # return True
+
+
+

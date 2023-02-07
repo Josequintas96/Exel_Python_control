@@ -98,8 +98,8 @@ class Group:
     def Group_add_full_stock_person(self, name, cost, quantity, date, full_name, run_person):
         self.PP[run_person].Person_add_full_stock(name, cost, quantity, date, full_name)
         
-    def Group_add_history_person(self, name, date, price, run_person):
-        self.PP[run_person].Person_add_to_track(name, date, price)
+    def Group_add_history_person(self, name, date, price, full_name, run_person):
+        self.PP[run_person].Person_add_to_track(name, date, price, full_name)
     
     def Group_get_person_history_stocks(self, run_person):
         #return all stocks in person using the history track, no repetition
@@ -225,7 +225,7 @@ class Group:
         if choice == 1:
             # print("\tSAVE FILE was chosen")
             #you are writing all your info in a txt file
-            f = open(os.path.join('Exel_Python_control', "stocks3.txt"), "w")
+            f = open(os.path.join('Exel_Python_control/Control_program', "stocks3.txt"), "w")
             for x in self.PP:
                 f.write("Person: " + x.name+"\n")
                 f.write("Acronym: " + x.acronym+"\n")
@@ -237,6 +237,9 @@ class Group:
                         x0=0
                         while x0 < len(histX.history):
                             strX = "!ST: " + histX.HS_get_value_hist(x0)
+                            
+                            # + "  " + histX.HS_get_full_name()  + "\n"
+                            # print("SSS: " + )
                             print(strX)
                             f.write(strX) 
                             x0+=1
@@ -322,7 +325,8 @@ class Person:
             
             print( x, " VALUE IS ", gg_info  )
             dateX = date.today()
-            x.HS_add_history(dateX, gg_info)
+            full_name = ""
+            x.HS_add_history(dateX, gg_info, full_name)
             
     def Person_back_up_history_onStock(self):
         for x in self.history_track:
@@ -382,7 +386,7 @@ class Person:
             print("HS__")
             if self.history_track[i0].name == name:
                 del self.history_track[i0]
-                print("This track should have been erase")
+                # print("This track should have been erase")
                 break
             i0+=1
         
@@ -397,25 +401,17 @@ class Person:
         return False
     
     def Person_Sort_Stocks(self):
-        # print("\tSort stcoks in Person")
-        # i_for = 0
-        # while i_for < len(self.stocks)-1:
-        #     if self.stocks[i_for+1].name < self.stocks[i_for]:
-        #         i_back = i_for+1
-                
-            
-        #     i_for +=1
-        self.stocks.sort(key=lambda x: x.name, reverse=False)
-        self.history_track.sort(key=lambda x: x.name, reverse=False)
+        self.stocks.sort(key=lambda x: x.full_name, reverse=False)
+        self.history_track.sort(key=lambda x: x.full_name, reverse=False)
         
         
         
-    def Person_add_to_track(self, name, date, price):
+    def Person_add_to_track(self, name, date, price, full_name):
         if self.Person_is_on_track(name):
             #IF DO NOT EXIST, THEN IT IS CREATED AND NOW ADD VALUE
-            self.Person_find_and_add_on_track(name, date, price)
+            self.Person_find_and_add_on_track(name, date, price, full_name)
         else:
-            self.Person_find_and_add_on_track(name, date, price)
+            self.Person_find_and_add_on_track(name, date, price, full_name)
             
     def Person_stock_list_in_history(self):
         #return a list with all possible stocks considering list, no repetiton
@@ -469,11 +465,11 @@ class Person:
     def Person_stock_history_length(self):
         return len(self.history_track)
             
-    def Person_find_and_add_on_track(self, name, date, price):
-        print("Find and add on track list")
+    def Person_find_and_add_on_track(self, name, date, price, full_name):
+        # print("Find and add on track list")
         for x in self.history_track:
             if name == x.name:
-                x.HS_add_history(date, price)
+                x.HS_add_history(date, price, full_name)
                 
     def Person_delete_Stock(self, name_stock, stock_quantity):
         i0 = 0
@@ -597,6 +593,7 @@ class Stocks:
         
 class history_Stocks:
     name =""
+    full_name = ""
     history = None
     
     def __init__(self, name):
@@ -605,10 +602,16 @@ class history_Stocks:
     
     def HS_get_len(self):
         return len(self.history)
+    
+    def HS_get_full_name(self):
+        return self.full_name
         
-    def HS_add_history(self, dateX, value):
+    def HS_add_history(self, dateX, value, full_name):
         # dateX = date.today()
         dateX = dateX
+        if self.full_name == "" or full_name == "":
+            self.full_name = full_name
+            print("New full_name: ", self.full_name)
         hist0 = (str(dateX), value)
         self.history.append(hist0)
         

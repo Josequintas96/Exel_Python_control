@@ -179,6 +179,8 @@ while person < Groupx.Group_get_num_persons():
     # print("Add stuff")
     # row+=1
     
-
+# i0=0
+# while i0 < 10:
+#     print("HHH")
     
 workbook.close()

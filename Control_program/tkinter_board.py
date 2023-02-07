@@ -1,9 +1,9 @@
 from tkinter import *
 from tkcalendar import DateEntry
 from tkinter import messagebox
-from python_stage8 import control_Group
-from python_stage5 import Group
-from python_stage10 import *
+from read_file import control_Group
+from Group import Group
+from Excel_code import *
 
 
 root = Tk()
@@ -243,7 +243,7 @@ def button5_control(Group_var):
     button5_frame.pack()
     b5_label.pack( )
     # b5_label2.pack( )
-    # b5_label3.pack( )
+    b5_label3.pack( )
     # b5_label4.pack( )
     b5_label5.pack( )
     b5_label6.pack()
@@ -251,9 +251,9 @@ def button5_control(Group_var):
     # b5g_f2.pack( pady=2, expand=True)
     # b5_f2.pack( pady=2, expand=True)
     # button5_frame2.pack()
-    # b5g_f3.pack( pady=2, expand=True)
-    # b5_f3.pack( pady=2, expand=True)
-    # button5_frame3.pack()
+    b5g_f3.pack( pady=2, expand=True)
+    b5_f3.pack( pady=2, expand=True)
+    button5_frame3.pack()
     # b5g_f4.pack( pady=6, expand=True)
     # b5_f4.pack( pady=6, expand=True)
     # button5_frame4.pack()
@@ -468,3 +468,5 @@ button_F5 = Button(button5_frame6, text= "Orginazar alfabeticamente", width= 20,
 
 
 root.mainloop()
+
+
