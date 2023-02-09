@@ -155,43 +155,51 @@ def Exel_production(GroupX):
                 #print("\t", var2)
                 worksheet.write(row,column+2, var2, cell_border_full)
                 column+=1
-                last_cost = []
+                last_cost = [] ##strore the fianl value of each purchase
                 
                 
                 #This section is to control board of total change per Stock bought
                 x=0
+                # if len(last_cost) > 0:    
                 for i3 in pp_S:
-                    
+                    print("TOT")
                     stockT = i3[3].split("-")
                     HS_T = hh_l[i2][0].split("-")
-                    print("\tSTOCK DATE: ",stockT)
-                    print("\tHISTORY DATEL ", HS_T )
+                    # print("\tSTOCK DATE: ",stockT)
+                    # print("\tHISTORY DATEL ", HS_T )
                     i4=0
                     # run_Value
                     run_v = False
+                    print("\t\trun_0: ", run_0)
+                    print("\t\tTOT ", len(hh_l)-1)
+                    print("\t\tstockT: ", int(stockT[0]),  "  ", int(stockT[1]), "  ", int(stockT[2]))
+                    print("\t\tHS_T: ", int(HS_T[0]),  "  ", int(HS_T[1]), "  ", int(HS_T[2]))
                     if int(stockT[0]) < int(HS_T[0]):
                         # print("\t\t This will occur  ", i3[3])
+                        print("\t\tHappen run")
                         run_v =True
                     if run_v == False:
                         if int(stockT[0]) == int(HS_T[0]) and int(stockT[1]) < int(HS_T[1]):
+                            print("\t\tHappen run")
                             run_v =True
                     if run_v == False:
                         if int(stockT[0]) <= int(HS_T[0]) and int(stockT[1]) <= int(HS_T[1]):
                             if stockT[2] <= HS_T[2]:
+                                print("\t\tHappen run")
                                 run_v =True
                     
                     if run_v:
-                        
+                            
                         if stock_p[x] == False:
                             cell_gray = workbook.add_format({'bg_color': '#E8E4C9'})
                             worksheet.write(row-1,column+2, "Junior "+str(x) , cell_gray)
                             stock_p[x] = True
                         var3 = float(i3[2])
                         
-                        
+                            
                         var2 = ((float(hh_l[i2][1])*100)/var3)-100
-                        
-                        
+                            
+                            
                         cell_format = workbook.add_format()
                         if var2 <0:
                             cell_format.set_font_color('red')
@@ -199,11 +207,13 @@ def Exel_production(GroupX):
                             cell_format.set_font_color('blue')
                         worksheet.write(row,column+2, round(var2, 2), cell_format)
                         column+=1
-                        # print("Verifying last cost: ", run_0)
+                            # print("Verifying last cost: ", run_0)
                         if run_0 == len(hh_l)-1:
+                            print("\tappend happen")
                             last_cost.append(var2)
                         x+=1
-                        
+                # else:
+                #     column+=3
                 run_0+=1
                 i2+=1
                 row+=1
@@ -218,7 +228,12 @@ def Exel_production(GroupX):
     #       THIS SECTION IS FOR THE RESULT FOR EACH TIME STOCK WAS BOUGHT
 
     #///////////////////////////////////////////////////////////////////////////////////////////////        
-    #///////////////////////////////////////////////////////////////////////////////////////////////        
+    #///////////////////////////////////////////////////////////////////////////////////////////////    
+            if len(hh_l) <= 0:
+                column+=3
+            print("\t\tLastCost: ", last_cost)
+            print("\t\tPP_S: ", pp_S)
+    
             cell_format_r = workbook.add_format({'color': 'red', 'center_across': True,})
             cell_format_b = workbook.add_format({'color': 'blue', 'center_across': True,})
             cell_format_rL = workbook.add_format({'color': 'red', 'top': 2, 'bottom': 2, 'center_across': True,})
@@ -234,15 +249,20 @@ def Exel_production(GroupX):
                 merge_row = row_n+runT
                 merge_column = column+3
                 worksheet.merge_range(merge_row,merge_column,merge_row,merge_column+2, "Se compro en: " + i5[3], cell_cream ) 
+                
+                total_p = i5[1]*i5[2]
                 worksheet.write(row_n+runT,column+6, "Junior "+str(xx) , cell_gray)
+                worksheet.write(row_n+runT,column+7, round(total_p,2) , cell_gray)
                 worksheet.write(row_n+runT+2,column+3, "Utilidad" , cell_format_p) 
                 
                 var3 = float(i5[2])
                 ind = int(runT/4)
+                print("runT: ", runT)
                 print("HHHH: ", ind)
-                print("\tHHH: ", last_cost)
+                # if len(last_cost) > 0:
                 var2 = 0
-                if len(last_cost) >0:                
+                if len(last_cost) >0:   
+                    print("\t\t\tHHH: ", last_cost[ind])
                     var2 = (var3*i5[1])*(last_cost[ind]/100)
                 # print("(", var3, "*", i5[1], ")*(", last_cost[ind], "/100)" )
                 if var2 < 0:
@@ -251,13 +271,14 @@ def Exel_production(GroupX):
                 else:
                     # cell_format.set_font_color('blue')
                     worksheet.write(row_n+runT+2,column+4, round(var2, 2) , cell_format_bL)
-                    
-                if last_cost[ind] < 0:
-                    # cell_format.set_font_color('red')
-                    worksheet.write(row_n+runT+2,column+5, round(last_cost[ind],2) , cell_format_rL)
-                else:
-                    # cell_format.set_font_color('blue')
-                    worksheet.write(row_n+runT+2,column+5, round(last_cost[ind],2 ), cell_format_bL)
+                
+                if len(last_cost) > 0:  
+                    if last_cost[ind] < 0:
+                        # cell_format.set_font_color('red')
+                        worksheet.write(row_n+runT+2,column+5, round(last_cost[ind],2) , cell_format_rL)
+                    else:
+                        # cell_format.set_font_color('blue')
+                        worksheet.write(row_n+runT+2,column+5, round(last_cost[ind],2 ), cell_format_bL)
                     
 
                 worksheet.write(row_n+runT+2,column+6, "% util" , cell_format_pL) 

@@ -1,31 +1,19 @@
-import os
-from datetime import date
-import yfinance as yf
 
 
+Group  CLASS ===>>> 33 Methods
 
-class Group:
-    PP = None
-    data_file = ""
+    1. __init__(self, file_name)   ===> initialize file
     
-    def __init__(self, file_name):
-        self.PP = []
-        self.data_file = file_name
+    2. Group_get_num_persons(self)   ===> return number of Persons
+        TEST DONE
     
-    def Group_get_num_persons(self):
-        return len(self.PP)
+    3. Group_get_num_persons_stocks(self, person_num)   ===> retrun number of stock a person posses
     
-    def Group_get_num_persons_stocks(self, person_num):
-        return self.PP[person_num].Person_num_stock()
+    4. Group_get_persons_name(self, person_num)    ===> return the name of a person
     
-    def Group_get_persons_name(self, person_num):
-        return self.PP[person_num].Person_get_name()
+    5. Group_get_persons_acronym(self, person_num)    ===> return the acronynm of a person
     
-    def Group_get_persons_acronym(self, person_num):
-        return self.PP[person_num].Person_get_acronym()
-    
-    def Group_get_persons_stock_name(self, person_num, stock_num):
-        return self.PP[person_num].Person_stock_name(stock_num)
+    6. Group_get_persons_stock_name(self, person_num, stock_num)   ===> return the name of certain stock on certain person
     
     def Group_get_persons_stock_price(self, person_num, stock_num):
         return self.PP[person_num].Person_stock_price(stock_num)
@@ -53,8 +41,8 @@ class Group:
         pp1.Person_insert_stock()
         pp1.Person_insert_stock()
         self.PP.append(pp1)
-        # print("Length of pp1: ", len(pp1.stocks))
-        # print("Length of PP: ", len(self.PP))
+        print("Length of pp1: ", len(pp1.stocks))
+        print("Length of PP: ", len(self.PP))
         
     def Group_insert_person(self, pp1):
         self.PP.append(pp1)
@@ -87,11 +75,11 @@ class Group:
                 if quantity.isdigit() == False:
                     return False
 
-                # print("PERSON FOUND")
+                print("PERSON FOUND")
                 self.Group_add_stock_person(name, float(cost), int(quantity), date, i)
                 return True
             i+=1
-        # print("NOT FOUND")
+        print("NOT FOUND")
         return False
     
     def Group_add_stock_person(self, name, cost, quantity, date, run_person):
@@ -166,7 +154,7 @@ class Group:
         try:
             info = gg_info.fast_info['last_price']
         except:
-            # print(f"Cannot get info of, it probably does not exist")
+            print(f"Cannot get info of, it probably does not exist")
             return False
         
         return True
@@ -180,7 +168,7 @@ class Group:
         self.PP[run_person].Person_delete_Stock(stock_name, int(quantity))
         
     def Group_Sort_Person(self):
-        # print("Sort stocks in each Persons in Group")
+        print("Sort stocks in each Persons in Group")
         for x in self.PP:
             x.Person_Sort_Stocks()
     
@@ -250,7 +238,7 @@ class Group:
                             
                             # + "  " + histX.HS_get_full_name()  + "\n"
                             # print("SSS: " + )
-                            # print(strX)
+                            print(strX)
                             f.write(strX) 
                             x0+=1
                         
@@ -327,13 +315,13 @@ class Person:
     def Person_add_history_onStock(self):
         #save on each history track
         for x in self.history_track:
-            # print("\t\t NAME: ", x.name)
+            print("\t\t NAME: ", x.name)
             gg = yf.Ticker(x.name)
             gg.history(period="max")
             # gg_info = gg.info["regularMarketPrice"]
             gg_info = gg.history_metadata["regularMarketPrice"]
             
-            # print( x, " VALUE IS ", gg_info  )
+            print( x, " VALUE IS ", gg_info  )
             dateX = date.today()
             full_name = ""
             x.HS_add_history(dateX, gg_info, full_name)
@@ -352,7 +340,6 @@ class Person:
     def Person_add_stock_to_history(self, stock):
         for x in self.history_track:
             if stock == x.name:
-                # x=0
                 print("Exist")
         return None
     
@@ -394,7 +381,7 @@ class Person:
             return False
         i0 =0
         while i0< len(self.history_track):
-            # print("HS__")
+            print("HS__")
             if self.history_track[i0].name == name:
                 del self.history_track[i0]
                 # print("This track should have been erase")
@@ -489,9 +476,9 @@ class Person:
                 stock_quantity = self.stocks[i0].Stock_reduce_quantity(stock_quantity)
                     
                 if self.stocks[i0].quantity <= 0:
-                    # print("To erase the stock: ", len(self.stocks))
+                    print("To erase the stock: ", len(self.stocks))
                     del self.stocks[i0]
-                    # print("To erase the stock: ", len(self.stocks))
+                    print("To erase the stock: ", len(self.stocks))
                     i0-=1
                     
                 if stock_quantity <0:
@@ -523,7 +510,7 @@ class Person:
                     x0+=1
             
             
-    def Person_take_action(self, data):
+    def Person_take_action(self, data_file):
         choice = input("What to do?  ")
         print("1. save value on txt")
         if int(choice) == 1:
@@ -590,10 +577,7 @@ class Stocks:
         
     def Stock_set_Yahoo_full_name(self):
         gg = yf.Ticker(self.name)
-        try:
-            gg_name = gg.info['longName']
-        except:
-            gg_name = self.name
+        gg_name = gg.info['longName']
         self.full_name = gg_name 
         
     def Stock_set_full_name(self, name):
@@ -625,13 +609,12 @@ class history_Stocks:
         dateX = dateX
         if self.full_name == "" or full_name == "":
             self.full_name = full_name
-            # print("New full_name: ", self.full_name)
+            print("New full_name: ", self.full_name)
         hist0 = (str(dateX), value)
         self.history.append(hist0)
         
     def HS_erase_history(self):
-        if len(self.history) > 0:
-            self.history.pop()
+        self.history.pop()
         
     def HS_get_value_hist(self, run_t):
         if len(self.history) == 0:

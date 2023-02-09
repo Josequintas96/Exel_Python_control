@@ -10,12 +10,6 @@ root = Tk()
 root.title('YAHOO FINANCE CONTROLLER')
 root.iconbitmap('c:/gui/codemy.ico')
 root.geometry("1000x600")
-
-
-# photo = PhotoImage(file = 'icon_pinball.png')
-# root.wm_iconphoto(False, photo)
-
-# root.iconbitmap("Exel_Python_control/icon_pinball.png")
 root.iconphoto(False, PhotoImage(file='Exel_Python_control/icon_pinball.png'))
 
 
@@ -23,8 +17,9 @@ root.iconphoto(False, PhotoImage(file='Exel_Python_control/icon_pinball.png'))
 my_menu = Menu(root)
 root.config(menu = my_menu)
 
-GroupX = Group()
-control_Group(GroupX)
+file_name_txt = "stocks3.txt"
+GroupX = Group("stocks3.txt")
+control_Group(GroupX, "stocks3.txt")
 
 Title = Label(root, text="Bienvenido a tu Cuenta de Finanza", font=("Courier 22 bold")).pack( side = TOP)
 
@@ -45,7 +40,7 @@ def Save_value(Group_var):
     b1_entry4.delete(0,END) 
     ent5 = b1_entry5.get() #date variable
     ent5X = ent5.split("/")
-    ent5 = "20"+ent5X[2]+"-"+ent5X[1]+"-"+ent5X[0]
+    ent5 = "20"+ent5X[2]+"-"+ent5X[0]+"-"+ent5X[1]
     print(ent5)
     b1_entry5.delete(0,END)
     if Group_var.Group_stock_verification(ent2.upper()):
