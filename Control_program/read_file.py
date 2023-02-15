@@ -8,7 +8,9 @@ def control_Group(Groupx, file_name):
     # print(date.today())
 
     # f = open("stocks.txt", "r")
-    f = open(os.path.join('Exel_Python_control/Control_program', file_name), "r")
+    script_data = os.path.dirname(__file__)
+    # absolute_path = os.path.join(script_data, real_path)
+    f = open(os.path.join(script_data, file_name), "r")
 
     f2 = f.readlines()
     # print(f2)

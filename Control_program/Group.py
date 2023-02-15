@@ -198,7 +198,8 @@ class Group:
         
             if int(choice) == 1:
                 print("\tSAVE FILE was chosen")
-                f = open(os.path.join('Exel_Python_control', self.data_file), "w")
+                script_data = os.path.dirname(__file__)
+                f = open(os.path.join(script_data, self.data_file), "w")
                 for x in self.PP:
                     f.write("Person: " + x.name+"\n")
                     f.write("Acronym: " + x.acronym+"\n")
@@ -235,7 +236,8 @@ class Group:
         if choice == 1:
             # print("\tSAVE FILE was chosen")
             #you are writing all your info in a txt file
-            f = open(os.path.join('Exel_Python_control/Control_program', self.data_file), "w")
+            script_data = os.path.dirname(__file__)
+            f = open(os.path.join(script_data, self.data_file), "w")
             for x in self.PP:
                 f.write("Person: " + x.name+"\n")
                 f.write("Acronym: " + x.acronym+"\n")
@@ -527,7 +529,8 @@ class Person:
         choice = input("What to do?  ")
         print("1. save value on txt")
         if int(choice) == 1:
-            f = open(os.path.join('Exel_Python_control', data_file), "w")
+            script_data = os.path.dirname(__file__)
+            f = open(os.path.join(script_data, self.data_file), "w")
             f.write("Person: " + self.name+"\n")
             f.write("Acronym: " + self.acronym+"\n")
             for stockX in self.stocks:

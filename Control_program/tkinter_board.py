@@ -4,14 +4,20 @@ from tkinter import messagebox
 from read_file import control_Group
 from Group import Group
 from Excel_code import *
+import os
 
 
 def tkinter_control():
+    
+    script_data = os.path.dirname(__file__)
+    real_path = "icon_pinball.png"
+    absolute_path = os.path.join(script_data, real_path)
     root = Tk()
     root.title('YAHOO FINANCE CONTROLLER')
     root.iconbitmap('c:/gui/codemy.ico')
     root.geometry("1000x600")
-    root.iconphoto(False, PhotoImage(file='Exel_Python_control/icon_pinball.png'))
+    # root.iconphoto(False, PhotoImage(file='Exel_Python_control/Control_program/icon_pinball.png'))
+    root.iconphoto(False, PhotoImage(file=absolute_path))
 
 
 

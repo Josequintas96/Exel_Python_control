@@ -19,7 +19,8 @@ def Exel_production(GroupX):
 #add on Excel
 
     # workbook = xlsxwriter.Workbook('hello.xlsx')
-    workbook = xlsxwriter.Workbook(os.path.join('Exel_Python_control/Control_program', 'Tabla_de_Acciones.xlsx'))
+    script_data = os.path.dirname(__file__)
+    workbook = xlsxwriter.Workbook(os.path.join(script_data, 'Tabla_de_Acciones.xlsx'))
     content = [1,2,3,4,5]
     person =0
     row=1
