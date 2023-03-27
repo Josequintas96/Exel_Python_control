@@ -7,30 +7,29 @@ from read_file import control_Group
 
 
 
-
-
-# GroupX = Group()
-# control_Group(GroupX)
-
-# GroupX.Group_print_group()
-
-
 def Exel_production(GroupX):
 #add on Excel
-
-    # workbook = xlsxwriter.Workbook('hello.xlsx')
     script_data = os.path.dirname(__file__)
-    workbook = xlsxwriter.Workbook(os.path.join(script_data, 'Tabla_de_Acciones.xlsx'))  #DOCUMENT IS CREATED
+    workbook = xlsxwriter.Workbook(os.path.join(script_data, 'Tabla_de_Acciones.xlsx'))  #1.=. DOCUMENT IS CREATED
     person =0
     row=1
     print("Length of Group Person: ", GroupX.Group_get_num_persons_stocks(person) )
+    
+    #2.=. DIVIDE THE WORK FOR EACH PERSON
     while person < GroupX.Group_get_num_persons():
         
-        cell_border_full = workbook.add_format({'border': 2, 'center_across': True, 'valign': 'vcenter' })
+        #////////////////////////////////////////////////////////////////////////////////////////////////////#
+        #////////////////////////////////////////////////////////////////////////////////////////////////////#
+        #//////////////////        BASIC CELL FORMATS                   /////////////////////////////////////#
+        #////////////////////////////////////////////////////////////////////////////////////////////////////#
+        
+        
+        cell_border_full = workbook.add_format({'border': 2, 'center_across': True, 'valign': 'vcenter', 'text_wrap': True, 'font_name':'Arial' })
         # cell_border_full.set_border(style=2)
         
-        cell_border_full_brown = workbook.add_format({'border': 2, 'color': 'brown', 'center_across': True, 'valign': 'vcenter' })
-        cell_simple = workbook.add_format({'center_across': True, 'valign': 'vcenter' })
+        cell_border_full_brown = workbook.add_format({'border': 2, 'color': 'brown', 'center_across': True, 'valign': 'vcenter', 'text_wrap': True, 'font_name':'Arial'  })
+        simple_cell = workbook.add_format({'center_across': True, 'valign': 'vcenter', 'text_wrap': True,  'font_name':'Arial' })
+        simple_cell_b = workbook.add_format({'center_across': True, 'valign': 'vcenter', 'text_wrap': True, 'bold': True, 'font_name':'Arial' })
         
         
         
@@ -38,19 +37,19 @@ def Exel_production(GroupX):
         # cell_color_b.set_color('blue')
         
         
-        worksheet = workbook.add_worksheet(GroupX.Group_get_persons_acronym(person))
+        worksheet = workbook.add_worksheet(GroupX.Group_get_persons_acronym(person)) #3.=. CREATE TAB FOR CURRENT PERSON
         # 
 
-        stockX =0
-        row =2
-        # print("\tLength of Person Stocks: ", GroupX.Group_get_person_history_length(stockX) )
-        # while stockX < GroupX.Group_get_num_persons_stocks(person):
+        row =2 #ORIGINAL START OF PROJECT ON ROW 2
+        column =2 #ORIGINAL START OF PROJECT ON COLUMN 2
             
-        pp_l = GroupX.Group_get_person_history_stocks(person) #return all stocks in person using the history track, no repetition
+        pp_l = GroupX.Group_get_person_history_stocks(person) #return all stocks in person using the history track, there is no repetition OF STOCK
         # print("\t", pp_l)
         o0 = 0
-        column =2
+        
         # while o0 < GroupX.Group_get_person_history_length(person):
+        
+        #4.=. RUN EACH STOCK 
         i1 = 0
         while i1 < len(pp_l):
             column =2
@@ -58,37 +57,43 @@ def Exel_production(GroupX):
             total_qu =0
             total_pri =0
             
-    #///////////////////////////////////////////////////////////////////////////////////////////////
-    #///////////////////////////////////////////////////////////////////////////////////////////////        
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
-    #        THIS SECTION IS FOR THE TITLE AND BASIC INFO OF THE STOCK
+    #        THIS SECTION IS FOR THE TITLE AND BASIC INFO OF THE STOCK (NAME, ACRONNYM, HISTORY TIMES BOUGHT)
 
-    #///////////////////////////////////////////////////////////////////////////////////////////////        
-    #///////////////////////////////////////////////////////////////////////////////////////////////        
-            cell_stock_title = workbook.add_format({'bg_color': '#82CAFF' , 'text_wrap': True, 'font_color':"#123456", 'font_size': 16 , 'border': 2, 'center_across': True, 'valign': 'vcenter'  })
-            # cell_stock_title.set_font_color("#123456")
-            # cell_stock_title.set_font_size(16)
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+                #original color 'font_color':"#123456"
+            cell_stock_title = workbook.add_format({'bg_color': '#A9FBF9' , 'text_wrap': True, 'font_color':"#123456", 'font_name':'Arial', 'bold': True,
+                                                    'font_size': 10 , 'border': 2, 'center_across': True, 'valign': 'vcenter' })
             
             pp_S = GroupX.Group_get_person_stock_per_name(person, pp_l[i1]) #repeated stocks on person in order of list name, quatity, cost, date, full_name
             valor_stock = 0 #stock cost multiply by number of them
             
-            worksheet.set_column(column, column, 20) #adjust width of cell
+            worksheet.set_column(column, column+2, 20) #adjust width of cell
+            # worksheet.set_column(column+4, column+8, 30) #adjust width of cell
+            
             worksheet.write(row,column, pp_S[0][4], cell_stock_title)
             worksheet.write(row,column+1, pp_l[i1], cell_stock_title)
             row+=1
             
+            #////////////////////////////////////////////////////////////////////////////////////////////////////#
+            #//////////////////        HISTORY OF BOUGHT STOCKS             /////////////////////////////////////#
+            #////////////////////////////////////////////////////////////////////////////////////////////////////#
             for iP in pp_S:
-                worksheet.write(row,column-1, str(iP[1]) + " stocks" , cell_simple) #quantity
+                worksheet.write(row,column-1, str(iP[1]) + " stocks" , simple_cell) #quantity
                 total_qu += int(iP[1])
-                worksheet.write(row ,column, iP[3] , cell_simple) # date    
+                worksheet.write(row ,column, iP[3] , simple_cell) # date    
                 worksheet.write(row ,column+1, round(iP[2],2), cell_border_full_brown ) #cost
                 total_pri += iP[2]
                 valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
                 row+=1
             worksheet.write(row,column-1, str(total_qu) + " stocks" , cell_color_b)
             
-            dateX = date.today()
-            worksheet.write(row ,column, str(dateX) , cell_simple)
+            # dateX = date.today()
+            # worksheet.write(row ,column, str(dateX) , simple_cell)
+            
             worksheet.write(row ,column+1, round(total_pri,2) , cell_border_full_brown)
             row+=2
             worksheet.write(row ,column+2, "Promedio", cell_border_full_brown )
@@ -113,11 +118,11 @@ def Exel_production(GroupX):
 
             
             # title for history table
-            worksheet.write(row,column, "$", cell_simple )
-            worksheet.write(row,column+1, "7%", cell_simple )
-            worksheet.write(row,column+2, "11%" , cell_simple)
-            worksheet.write(row,column+3, "15%" , cell_simple )
-            worksheet.write(row,column+4, "20%" , cell_simple )
+            worksheet.write(row,column, "$", simple_cell_b )
+            worksheet.write(row,column+1, "7%", simple_cell_b )
+            worksheet.write(row,column+2, "11%" , simple_cell_b)
+            worksheet.write(row,column+3, "15%" , simple_cell_b )
+            worksheet.write(row,column+4, "20%" , simple_cell_b )
             #this section is to print the history track with algorithm
             hh_l = GroupX.Group_get_person_history_track(person, i1)
             i2 =0
@@ -131,29 +136,33 @@ def Exel_production(GroupX):
             worksheet.set_column(1, 1, 10) #adjust width of cell for dates
             while i2 < len(hh_l):
                 column =1
-                worksheet.write(row,column, hh_l[i2][0], cell_simple ) 
+                worksheet.write(row,column, hh_l[i2][0], simple_cell ) 
                 # worksheet.write(row,column, pp_l[i1] )        
-                worksheet.write(row,column+1, hh_l[i2][1], cell_simple ) 
+                worksheet.write(row,column+1, hh_l[i2][1], simple_cell ) 
                 
                 
                 var2 = "=("+str(hh_l[i2][1])+"*"+ "0.07)"+"+"+str(hh_l[i2][1])
                 #print("\t", var2)
-                worksheet.write(row,column+2, var2, cell_border_full)
+                var7 = float(hh_l[i2][1])*0.07+float(hh_l[i2][1])
+                worksheet.write(row,column+2, round(var7, 2), cell_border_full)
                 column+=1
                     
-                var2 = "=("+str(hh_l[i2][1])+"*"+ "0.10)"+"+"+str(hh_l[i2][1])
+                var2 = "=("+str(hh_l[i2][1])+"*"+ "0.11)"+"+"+str(hh_l[i2][1])
+                var7 = float(hh_l[i2][1])*0.11+float(hh_l[i2][1])
                 #print("\t", var2)
-                worksheet.write(row,column+2, var2, cell_border_full)
+                worksheet.write(row,column+2, round(var7,2) , cell_border_full)
                 column+=1
                     
                 var2 = "=("+str(hh_l[i2][1])+"*"+ "0.15)"+"+"+str(hh_l[i2][1])
+                var7 = float(hh_l[i2][1])*0.15+float(hh_l[i2][1])
                 #print("\t", var2)
-                worksheet.write(row,column+2, var2, cell_border_full)
+                worksheet.write(row,column+2, round(var7,2), cell_border_full)
                 column+=1
                     
                 var2 = "=("+str(hh_l[i2][1])+"*"+ "0.20)"+"+"+str(hh_l[i2][1])
+                var7 = float(hh_l[i2][1])*0.2+float(hh_l[i2][1])
                 #print("\t", var2)
-                worksheet.write(row,column+2, var2, cell_border_full)
+                worksheet.write(row,column+2, round(var7,2), cell_border_full)
                 column+=1
                 last_cost = [] ##strore the fianl value of each purchase
                 
@@ -192,7 +201,7 @@ def Exel_production(GroupX):
                             
                         if stock_p[x] == False:
                             cell_gray = workbook.add_format({'bg_color': '#E8E4C9'})
-                            worksheet.write(row-1,column+2, "Junior "+str(x) , cell_gray)
+                            worksheet.write(row-1,column+2, "Junior "+str(x+1) , cell_gray)
                             stock_p[x] = True
                         var3 = float(i3[2])
                         
@@ -224,9 +233,7 @@ def Exel_production(GroupX):
             
     #///////////////////////////////////////////////////////////////////////////////////////////////
     #///////////////////////////////////////////////////////////////////////////////////////////////        
-
     #       THIS SECTION IS FOR THE RESULT FOR EACH TIME STOCK WAS BOUGHT
-
     #///////////////////////////////////////////////////////////////////////////////////////////////        
     #///////////////////////////////////////////////////////////////////////////////////////////////    
             if len(hh_l) <= 0:
@@ -251,7 +258,7 @@ def Exel_production(GroupX):
                 worksheet.merge_range(merge_row,merge_column,merge_row,merge_column+2, "Se compro en: " + i5[3], cell_cream ) 
                 
                 total_p = i5[1]*i5[2]
-                worksheet.write(row_n+runT,column+6, "Junior "+str(xx) , cell_gray)
+                worksheet.write(row_n+runT,column+6, "Junior "+str(xx+1) , cell_gray)
                 worksheet.write(row_n+runT,column+7, round(total_p,2) , cell_gray)
                 worksheet.write(row_n+runT+2,column+3, "Utilidad" , cell_format_p) 
                 
@@ -288,9 +295,7 @@ def Exel_production(GroupX):
             
     #///////////////////////////////////////////////////////////////////////////////////////////////
     #///////////////////////////////////////////////////////////////////////////////////////////////        
-
     #     THIS SECTION IS FOR THE TOTAL RERSULT OF THE STOCK IN GENERAL
-
     #///////////////////////////////////////////////////////////////////////////////////////////////        
     #///////////////////////////////////////////////////////////////////////////////////////////////        
 
@@ -330,11 +335,11 @@ def Exel_production(GroupX):
             worksheet.write(row_n+runT+7,column+6, "Total perdida" ,cell_table_down_cornerL )
             if total < 0:
                 # cell_format.set_font_color('red')
-                cell_table_down_cornerR = workbook.add_format({'font_color': 'red', 'right': 2, 'bottom': 2 })
+                cell_table_down_cornerR = workbook.add_format({'center_across': True, 'font_color': 'red', 'right': 2, 'bottom': 2 })
                 worksheet.write(row_n+runT+7,column+7, round(total,2) , cell_table_down_cornerR)
             else:
                 # cell_format.set_font_color('blue')
-                cell_table_down_cornerR = workbook.add_format({'font_color': 'blue', 'right': 2, 'bottom': 2 })
+                cell_table_down_cornerR = workbook.add_format({'center_across': True, 'font_color': 'blue', 'right': 2, 'bottom': 2 })
                 worksheet.write(row_n+runT+7,column+7, round(total,2) , cell_table_down_cornerR)      
             
             
@@ -344,7 +349,7 @@ def Exel_production(GroupX):
                 row = row_n+runT+7
             
             cell_separator = workbook.add_format({'bg_color': '#43302E'})
-            worksheet.merge_range(row+2,0,row+3,column+7, "", cell_separator ) 
+            worksheet.merge_range(row+2,0,row+3,column+12, "", cell_separator ) 
             
             i1+=1
             row +=6
@@ -353,7 +358,7 @@ def Exel_production(GroupX):
         row+=3   
             
         cell_separator = workbook.add_format({'bg_color': '#43302E'})
-        worksheet.merge_range(row+2,0,row+3,column+7, "", cell_separator ) 
+        worksheet.merge_range(row+2,0,row+3,column+12, "", cell_separator ) 
             
     #///////////////////////////////////////////////////////////////////////////////////////////////
     #///////////////////////////////////////////////////////////////////////////////////////////////        
@@ -387,15 +392,16 @@ def Exel_production(GroupX):
         row+=6
         
         columnT =2
-        cell_stock_title = workbook.add_format({'bold': True, 'font_color': '#123456', 'font_size': 12 })
-        cell_stock_result = workbook.add_format({'bold': True, 'font_color': 'black', 'font_size': 12 })
+        cell_stock_title = workbook.add_format({'center_across': True, 'bold': True, 'font_color': '#123456', 'font_size': 12 })
+        cell_stock_result = workbook.add_format({'center_across': True, 'bold': True, 'font_color': 'black', 'font_size': 12 })
         worksheet.write(row,columnT+2, "Nro. Acciones" , cell_stock_title)
         worksheet.write(row,columnT+3, "Costo", cell_stock_title )
         worksheet.write(row,columnT+4, "Total" , cell_stock_title)
         worksheet.write(row,columnT+5, "% Cartera", cell_stock_title )
         
         
-        cell_stock_name = workbook.add_format({'bg_color': '#82CAFF' , 'text_wrap': True, 'border': 2, 'font_color': '#123456', 'font_size': 16 })
+        cell_stock_name = workbook.add_format({'center_across': True, 'bg_color': '#A9FBF9' , 'text_wrap': True, 
+                                               'border': 2, 'font_color': '#123456', 'font_size': 16 })
         cell_stock_details = workbook.add_format({'text_wrap': True, 'border': 2, 'center_across': True, 'valign': 'vcenter' })
 
             
