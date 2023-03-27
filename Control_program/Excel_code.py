@@ -20,8 +20,7 @@ def Exel_production(GroupX):
 
     # workbook = xlsxwriter.Workbook('hello.xlsx')
     script_data = os.path.dirname(__file__)
-    workbook = xlsxwriter.Workbook(os.path.join(script_data, 'Tabla_de_Acciones.xlsx'))
-    content = [1,2,3,4,5]
+    workbook = xlsxwriter.Workbook(os.path.join(script_data, 'Tabla_de_Acciones.xlsx'))  #DOCUMENT IS CREATED
     person =0
     row=1
     print("Length of Group Person: ", GroupX.Group_get_num_persons_stocks(person) )
@@ -44,18 +43,18 @@ def Exel_production(GroupX):
 
         stockX =0
         row =2
-        print("\tLength of Person Stocks: ", GroupX.Group_get_person_history_length(stockX) )
+        # print("\tLength of Person Stocks: ", GroupX.Group_get_person_history_length(stockX) )
         # while stockX < GroupX.Group_get_num_persons_stocks(person):
             
         pp_l = GroupX.Group_get_person_history_stocks(person) #return all stocks in person using the history track, no repetition
-        print("\t", pp_l)
+        # print("\t", pp_l)
         o0 = 0
         column =2
         # while o0 < GroupX.Group_get_person_history_length(person):
         i1 = 0
         while i1 < len(pp_l):
             column =2
-            print("\t\tSTOCK: ", pp_l[i1])
+            # print("\t\tSTOCK: ", pp_l[i1])
             total_qu =0
             total_pri =0
             
