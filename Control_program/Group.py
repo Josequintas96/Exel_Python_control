@@ -140,6 +140,11 @@ class Group:
         for pers in self.PP:
             pers.Person_back_up_history_onStock()
             
+    def Group_back_up_first_history(self):
+        # print("\t\Back up history for all persons")
+        for pers in self.PP:
+            pers.Person_back_up_first_history_onStock()
+            
 
     def Group_get_person_stock_per_name(self, run_person, stock_name):
         #return list with all stocks price and date with specific name
@@ -269,6 +274,9 @@ class Group:
             self.Group_back_up_history()
         elif choice ==5:
             self.Group_Sort_Person()
+        elif choice ==6:
+            # print("\tHISTORY was mean to be rewrite")
+            self.Group_back_up_first_history()
             
         
 
@@ -343,6 +351,10 @@ class Person:
     def Person_back_up_history_onStock(self):
         for x in self.history_track:
             x.HS_erase_history()
+            
+    def Person_back_up_first_history_onStock(self):
+        for x in self.history_track:
+            x.HS_erase_first_history()
         
         
     def Person_insert_stock(self):
@@ -635,6 +647,10 @@ class history_Stocks:
     def HS_erase_history(self):
         if len(self.history) > 0:
             self.history.pop()
+            
+    def HS_erase_first_history(self):
+        if len(self.history) > 0:
+            self.history.pop(0)
         
     def HS_get_value_hist(self, run_t):
         if len(self.history) == 0:

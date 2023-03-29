@@ -37,6 +37,7 @@ def Exel_production(GroupX):
         # cell_color_b.set_color('blue')
         
         
+        set_chart_sheet_name = GroupX.Group_get_persons_acronym(person)
         worksheet = workbook.add_worksheet(GroupX.Group_get_persons_acronym(person)) #3.=. CREATE TAB FOR CURRENT PERSON
         # 
 
@@ -56,11 +57,12 @@ def Exel_production(GroupX):
             # print("\t\tSTOCK: ", pp_l[i1])
             total_qu =0
             total_pri =0
-            
+        
+            chart_price = [] #list to store begin and end for list of prices
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
-    #        THIS SECTION IS FOR THE TITLE AND BASIC INFO OF THE STOCK (NAME, ACRONNYM, HISTORY TIMES BOUGHT)
+    #//////   THIS SECTION IS FOR THE TITLE AND BASIC INFO OF THE STOCK (NAME, ACRONNYM, HISTORY TIMES BOUGHT)  ///#
 
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
@@ -74,6 +76,7 @@ def Exel_production(GroupX):
             worksheet.set_column(column, column+2, 20) #adjust width of cell
             # worksheet.set_column(column+4, column+8, 30) #adjust width of cell
             
+            chart_price.append(row) #mark the first row where title is set up
             worksheet.write(row,column, pp_S[0][4], cell_stock_title)
             worksheet.write(row,column+1, pp_l[i1], cell_stock_title)
             row+=1
@@ -86,13 +89,10 @@ def Exel_production(GroupX):
                 total_qu += int(iP[1])
                 worksheet.write(row ,column, iP[3] , simple_cell) # date    
                 worksheet.write(row ,column+1, round(iP[2],2), cell_border_full_brown ) #cost
-                total_pri += iP[2]
+                total_pri += iP[2]*iP[1]
                 valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
                 row+=1
             worksheet.write(row,column-1, str(total_qu) + " stocks" , cell_color_b)
-            
-            # dateX = date.today()
-            # worksheet.write(row ,column, str(dateX) , simple_cell)
             
             worksheet.write(row ,column+1, round(total_pri,2) , cell_border_full_brown)
             row+=2
@@ -127,6 +127,8 @@ def Exel_production(GroupX):
             hh_l = GroupX.Group_get_person_history_track(person, i1)
             i2 =0
             row +=1
+            chart_price.append(row) #mark the first row when list start
+            
             run_0 =0
             stock_p = [] #occurence thta stock must be inserted as title
             x=0
@@ -137,8 +139,9 @@ def Exel_production(GroupX):
             while i2 < len(hh_l):
                 column =1
                 worksheet.write(row,column, hh_l[i2][0], simple_cell ) 
-                # worksheet.write(row,column, pp_l[i1] )        
-                worksheet.write(row,column+1, hh_l[i2][1], simple_cell ) 
+                # worksheet.write(row,column, pp_l[i1] )      
+                value_cost = float(hh_l[i2][1])  
+                worksheet.write(row,column+1, round(value_cost,2), simple_cell ) 
                 
                 
                 var2 = "=("+str(hh_l[i2][1])+"*"+ "0.07)"+"+"+str(hh_l[i2][1])
@@ -226,7 +229,7 @@ def Exel_production(GroupX):
                 run_0+=1
                 i2+=1
                 row+=1
-                
+            chart_price.append(row-1) #mark the last row when list end    
             runT=0
             
             
@@ -292,13 +295,13 @@ def Exel_production(GroupX):
                 total_of_each_stock += var2
                 runT+=4
                 xx+=1
+                
             
     #///////////////////////////////////////////////////////////////////////////////////////////////
     #///////////////////////////////////////////////////////////////////////////////////////////////        
     #     THIS SECTION IS FOR THE TOTAL RERSULT OF THE STOCK IN GENERAL
     #///////////////////////////////////////////////////////////////////////////////////////////////        
     #///////////////////////////////////////////////////////////////////////////////////////////////        
-
             worksheet.write(row_n+runT+2,column+5, "Total" , cell_format_p)
             total = total_of_each_stock
             if total < 0:
@@ -332,13 +335,15 @@ def Exel_production(GroupX):
             worksheet.write(row_n+runT+6,column+6, "" , cell_table_left_size)
             worksheet.write(row_n+runT+6,column+7, "" , cell_table_right_size)
             
-            worksheet.write(row_n+runT+7,column+6, "Total perdida" ,cell_table_down_cornerL )
+            
             if total < 0:
                 # cell_format.set_font_color('red')
+                worksheet.write(row_n+runT+7,column+6, "Perdida Total" ,cell_table_down_cornerL )
                 cell_table_down_cornerR = workbook.add_format({'center_across': True, 'font_color': 'red', 'right': 2, 'bottom': 2 })
                 worksheet.write(row_n+runT+7,column+7, round(total,2) , cell_table_down_cornerR)
             else:
                 # cell_format.set_font_color('blue')
+                worksheet.write(row_n+runT+7,column+6, "Ganancia Total" ,cell_table_down_cornerL )
                 cell_table_down_cornerR = workbook.add_format({'center_across': True, 'font_color': 'blue', 'right': 2, 'bottom': 2 })
                 worksheet.write(row_n+runT+7,column+7, round(total,2) , cell_table_down_cornerR)      
             
@@ -354,11 +359,52 @@ def Exel_production(GroupX):
             i1+=1
             row +=6
         
-        o0+=1
-        row+=3   
+        
+            #///////////////////////////////////////////////////////////////////////////////////////////////
+            #///////////////////////////////////////////////////////////////////////////////////////////////        
+            #     THIS SECTION IS TO MAKE A CHART WITH INFO
+            #///////////////////////////////////////////////////////////////////////////////////////////////        
+            #///////////////////////////////////////////////////////////////////////////////////////////////        
+            print("SUPER")
+                        
+            chart = workbook.add_chart({'type': 'line'}) #initialize the chart
+            set_up_chart = chart_price[0]
+            starting_row = chart_price[1]
+            length_of_row = chart_price[2]
+            # print("\t\t kkkkkkkkkkklll Set up chart: ", set_up_chart)
+            # print("\t\t kkkkkkkkkkklll Starting row: ", starting_row)
+            # print("\t\t kkkkkkkkkkklll length of row: ", length_of_row)
+                        
+                    # Add a series to the chart.
+            chart.add_series({
+                                'name': [set_chart_sheet_name, set_up_chart, 3],
+                                'values': [set_chart_sheet_name, starting_row, 2, length_of_row, 2]
+                                })
+
+            # chart.add_series({'values': '=Sheet1!$C$11:$C$15'})
+
+                        # Insert the chart into the worksheet.
+            worksheet.insert_chart(set_up_chart+i1, column+10, chart)
+        
+            chart_price.clear()
+        
+
+        
+    
+    #///////////////////////////////////////////////////////////////////////////////////////////////
+    #///////////////////////////////////////////////////////////////////////////////////////////////        
+
+    #     THIS SECTION IS FOR THE SEPARATION BETWEEN STOCK RESULTS 
+
+    #///////////////////////////////////////////////////////////////////////////////////////////////        
+    #///////////////////////////////////////////////////////////////////////////////////////////////         
             
+        o0+=1
+        row+=3    
         cell_separator = workbook.add_format({'bg_color': '#43302E'})
         worksheet.merge_range(row+2,0,row+3,column+12, "", cell_separator ) 
+        
+    
             
     #///////////////////////////////////////////////////////////////////////////////////////////////
     #///////////////////////////////////////////////////////////////////////////////////////////////        
@@ -372,6 +418,7 @@ def Exel_production(GroupX):
         #run for each stock
         cartera_value = 0
         promedio_list = []
+        valor_stock = 0
         valor_stock_list = []
         total_qu_list = []
         while i9 < len(pp_l):
@@ -379,12 +426,16 @@ def Exel_production(GroupX):
             #Calculate promedio and total quantity
             for iP in pp_S:
                 total_qu += iP[1]
-                total_pri += iP[2]
+                # total_pri += iP[2]
                 valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
+                # print("   kkkkkkkl : ", iP[0], "  ", iP[1], "  ", iP[2])
             total_qu_list.append(total_qu)
             valor_stock_list.append(valor_stock)
             promedio_list.append(valor_stock/total_qu)
             cartera_value+=valor_stock
+            total_qu =0
+            # total_pri =0
+            valor_stock =0
             
             i9+=1
         
@@ -395,7 +446,7 @@ def Exel_production(GroupX):
         cell_stock_title = workbook.add_format({'center_across': True, 'bold': True, 'font_color': '#123456', 'font_size': 12 })
         cell_stock_result = workbook.add_format({'center_across': True, 'bold': True, 'font_color': 'black', 'font_size': 12 })
         worksheet.write(row,columnT+2, "Nro. Acciones" , cell_stock_title)
-        worksheet.write(row,columnT+3, "Costo", cell_stock_title )
+        worksheet.write(row,columnT+3, "Costo/Promedio", cell_stock_title )
         worksheet.write(row,columnT+4, "Total" , cell_stock_title)
         worksheet.write(row,columnT+5, "% Cartera", cell_stock_title )
         
@@ -430,8 +481,6 @@ def Exel_production(GroupX):
         
             
         person+=1
-
-        
 
         
     workbook.close()

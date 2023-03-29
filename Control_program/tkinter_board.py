@@ -197,6 +197,7 @@ def tkinter_control():
         b3_f0.pack()
         b3_label0.pack(pady=9)
         b3_button.pack()
+        b3_button1.pack()
         b3_button2.pack()
         # Group_var.Group_command_action(2)
         
@@ -297,6 +298,11 @@ def tkinter_control():
         messagebox.showinfo("SUCCEED", "Documento txt se ha creado")
         Exel_production(Group_var)
         messagebox.showinfo("SUCCEED", "Documento Excel se ha creado")
+        
+    def buttonF3_1(Group_var):
+        # print("SUPER")
+        Group_var.Group_command_action(6)
+        messagebox.showinfo("SUCCEED", "Historial previo ha sido borrado")
         
     def buttonF3_2(Group_var):
         # print("SUPER")
@@ -431,8 +437,9 @@ def tkinter_control():
     #button 3 labels and variables to use
     b3_label0 = Label(b3_f0, text="Modifica tu cuenta", font=("Courier 22 bold"))
     b3_button = Button(button3_frame, text= "Guarda el valor de tus acciones", width= 20, command= lambda: buttonF3(GroupX))
-
-    b3_button2 = Button(button3_frame, text= "Borra fecha de tus acciones", width= 20, command= lambda: buttonF3_2(GroupX))
+    
+    b3_button1 = Button(button3_frame, text= "Borra primera fecha de tus acciones", width= 30, command= lambda: buttonF3_1(GroupX))
+    b3_button2 = Button(button3_frame, text= "Borra ultima fecha de tus acciones", width= 30, command= lambda: buttonF3_2(GroupX))
 
     # button 4 labels and variable to use
     b4_button = Button(button4_frame, text= "Borra a una Accion", width= 25, height=3, command= lambda :delete_person(GroupX))
