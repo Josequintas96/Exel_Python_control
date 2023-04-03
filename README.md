@@ -12,6 +12,7 @@ The program use library tkinter to create control panel where user can use each 
 
     2. Create a person who will buy stocks
     
+<img width="200" heigth="200" alt="Screen Shot 2023-03-29 at 2 27 48 PM" src="https://user-images.githubusercontent.com/44034603/229606542-ecb59d7e-64c6-4134-b89c-3962d3c0a88a.png">
 
 
     3. Use yfiance to retrieve current value fo all your stocks bought from Yahoo Finance.
