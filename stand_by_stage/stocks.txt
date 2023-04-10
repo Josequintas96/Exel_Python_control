@@ -1,4 +1,0 @@
-SPY 1
-BOB 1
-DIS 1
-NTDOY 2

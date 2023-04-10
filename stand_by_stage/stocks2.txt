@@ -1,8 +1,0 @@
-Person: Jose Quintas
-Acronym: JMQ
-DIS 1 0 12/09/2022
-PSY 2 0 12/08/2022
-Person: Estefania
-Acronym: TEFI
-PEP 13 0 12/04/2022
-NTDOY 45 0 12/03/2002
