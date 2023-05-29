@@ -196,9 +196,9 @@ def tkinter_control():
         button3_frame.pack()
         b3_f0.pack()
         b3_label0.pack(pady=9)
-        b3_button.pack()
-        b3_button1.pack()
-        b3_button2.pack()
+        b3_button.pack(pady=9)
+        b3_button1.pack(pady=9)
+        b3_button2.pack(pady=9)
         # Group_var.Group_command_action(2)
         
     def button4_control(Group_var):
@@ -436,7 +436,7 @@ def tkinter_control():
 
     #button 3 labels and variables to use
     b3_label0 = Label(b3_f0, text="Modifica tu cuenta", font=("Courier 22 bold"))
-    b3_button = Button(button3_frame, text= "Guarda el valor de tus acciones", width= 28, command= lambda: buttonF3(GroupX))
+    b3_button = Button(button3_frame, text= "Guarda el valor de tus acciones", width= 28,  command= lambda: buttonF3(GroupX))
     
     b3_button1 = Button(button3_frame, text= "Borra primera fecha de tus acciones", width= 38, command= lambda: buttonF3_1(GroupX))
     b3_button2 = Button(button3_frame, text= "Borra ultima fecha de tus acciones", width= 38, command= lambda: buttonF3_2(GroupX))
