@@ -6,6 +6,11 @@ import os
 from read_file import control_Group
 
 
+def date_conf(iP):
+    ix = iP.split("-")
+    ill = ix[2] + "/" + ix[1]+ "/" + ix[0]
+    return ill
+
 
 def Exel_production(GroupX):
 #add on Excel
@@ -59,6 +64,7 @@ def Exel_production(GroupX):
             total_pri =0
         
             chart_price = [] #list to store begin and end for list of prices
+            
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
@@ -87,7 +93,9 @@ def Exel_production(GroupX):
             for iP in pp_S:
                 worksheet.write(row,column-1, str(iP[1]) + " stocks" , simple_cell) #quantity
                 total_qu += int(iP[1])
-                worksheet.write(row ,column, iP[3] , simple_cell) # date    
+                
+                
+                worksheet.write(row ,column, date_conf(iP[3]) , simple_cell) # date    
                 worksheet.write(row ,column+1, round(iP[2],2), cell_border_full_brown ) #cost
                 total_pri += iP[2]*iP[1]
                 valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
@@ -136,9 +144,10 @@ def Exel_production(GroupX):
                 stock_p.append(False)
                 x+=1
             worksheet.set_column(1, 1, 10) #adjust width of cell for dates
+            #################### DATE ##################################
             while i2 < len(hh_l):
                 column =1
-                worksheet.write(row,column, hh_l[i2][0], simple_cell ) 
+                worksheet.write(row,column, date_conf(hh_l[i2][0]), simple_cell ) 
                 # worksheet.write(row,column, pp_l[i1] )      
                 value_cost = float(hh_l[i2][1])  
                 worksheet.write(row,column+1, round(value_cost,2), simple_cell ) 
@@ -421,11 +430,15 @@ def Exel_production(GroupX):
         valor_stock = 0
         valor_stock_list = []
         total_qu_list = []
+        total_qu = 0
         while i9 < len(pp_l):
             pp_S = GroupX.Group_get_person_stock_per_name(person, pp_l[i9]) #repeated stocks on person in order of list name, quatity, cost, date
             #Calculate promedio and total quantity
             for iP in pp_S:
+                print("IP:   ", iP)
                 total_qu += iP[1]
+                print("\t IP Quantity:  ", iP[1])
+                print("\t Total Quantity:  ", total_qu)
                 # total_pri += iP[2]
                 valor_stock += iP[1]*iP[2] #cost multiply by stock = total cost of sell
                 # print("   kkkkkkkl : ", iP[0], "  ", iP[1], "  ", iP[2])
