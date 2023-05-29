@@ -14,8 +14,8 @@ def tkinter_control():
     absolute_path = os.path.join(script_data, real_path)
     root = Tk()
     root.title('YAHOO FINANCE CONTROLLER')
-    root.iconbitmap('c:/gui/codemy.ico')
-    root.geometry("1000x600")
+    # root.iconbitmap('c:/gui/codemy.ico')
+    root.geometry("1280x650")
     # root.iconphoto(False, PhotoImage(file='Exel_Python_control/Control_program/icon_pinball.png'))
     root.iconphoto(False, PhotoImage(file=absolute_path))
 
@@ -393,11 +393,11 @@ def tkinter_control():
     button5_frame6 = Frame(b5g_f6, width=600, height=500, )
 
 
-    button_op1 = Button(button_frame, text= "Guardar Accion", width= 18, command= lambda: button1_control(GroupX)).pack(side = LEFT, pady=20)
-    button_op2 = Button(button_frame, text= "New Person", width= 18, command= lambda: button2_control(GroupX)).pack(side = LEFT, pady=20)
-    button_op3 = Button(button_frame, text= "Guardar valor de hoy", width= 18, command= lambda: button3_control(GroupX)).pack(side = LEFT, pady=20)
-    button_op4 = Button(button_frame, text= "Vender Action", width= 18, command= lambda: button4_control(GroupX)).pack(side = LEFT, pady=20)
-    button_op5 = Button(button_frame, text= "Base de Control", width= 18, command= lambda: button5_control(GroupX)).pack(side = LEFT, pady=20)
+    button_op1 = Button(button_frame, text= "Guardar Accion", width= 24, command= lambda: button1_control(GroupX)).pack(side = LEFT, pady=20)
+    button_op2 = Button(button_frame, text= "Nueva Persona", width= 24, command= lambda: button2_control(GroupX)).pack(side = LEFT, pady=20)
+    button_op3 = Button(button_frame, text= "Guardar valor de hoy", width= 24, command= lambda: button3_control(GroupX)).pack(side = LEFT, pady=20)
+    button_op4 = Button(button_frame, text= "Vender Action", width= 24, command= lambda: button4_control(GroupX)).pack(side = LEFT, pady=20)
+    button_op5 = Button(button_frame, text= "Base de Control", width= 24, command= lambda: button5_control(GroupX)).pack(side = LEFT, pady=20)
 
 
 
@@ -408,7 +408,7 @@ def tkinter_control():
 
     #button 1 labels and variables to use
     b1_label0 = Label(b1_f0, text="Agrega una Accion\n", font=("Courier 22 bold"))
-    b1_label = Label(b1_f1, text="PERSON")
+    b1_label = Label(b1_f1, text="PERSONA")
     b1_variable0 = StringVar(root)
     b1_variable0.set("") # default value
     pp_l = [0]
@@ -423,7 +423,7 @@ def tkinter_control():
     b1_entry4 = Entry(b1_f4, bd =5, width=50)
     b1_label5 = Label(b1_f5, text="Fecha")
     b1_entry5 = DateEntry(b1_f5, selectmode="day", bd =5, width=50)
-    b1_button = Button(button1_frame, text= "Insertar", width= 25, height=3, command= lambda :Save_value(GroupX))
+    b1_button = Button(button1_frame, text= "Insertar", width= 28, height=3, command= lambda :Save_value(GroupX))
 
 
     #button 2 labels and variables to use
@@ -432,14 +432,14 @@ def tkinter_control():
     b2_entry = Entry(b2_f1, bd =5, width=50)
     b2_label2 = Label(b2_f2, text="Acronimo")
     b2_entry2 = Entry(b2_f2, bd =5, width=50)
-    b2_button = Button(button2_frame, text= "Entra una nueva Persona", width= 25, height=3, command= lambda :Add_person(GroupX, pp_l))
+    b2_button = Button(button2_frame, text= "Entra una nueva Persona", width= 28, height=3, command= lambda :Add_person(GroupX, pp_l))
 
     #button 3 labels and variables to use
     b3_label0 = Label(b3_f0, text="Modifica tu cuenta", font=("Courier 22 bold"))
-    b3_button = Button(button3_frame, text= "Guarda el valor de tus acciones", width= 20, command= lambda: buttonF3(GroupX))
+    b3_button = Button(button3_frame, text= "Guarda el valor de tus acciones", width= 28, command= lambda: buttonF3(GroupX))
     
-    b3_button1 = Button(button3_frame, text= "Borra primera fecha de tus acciones", width= 30, command= lambda: buttonF3_1(GroupX))
-    b3_button2 = Button(button3_frame, text= "Borra ultima fecha de tus acciones", width= 30, command= lambda: buttonF3_2(GroupX))
+    b3_button1 = Button(button3_frame, text= "Borra primera fecha de tus acciones", width= 38, command= lambda: buttonF3_1(GroupX))
+    b3_button2 = Button(button3_frame, text= "Borra ultima fecha de tus acciones", width= 38, command= lambda: buttonF3_2(GroupX))
 
     # button 4 labels and variable to use
     b4_button = Button(button4_frame, text= "Borra a una Accion", width= 25, height=3, command= lambda :delete_person(GroupX))
